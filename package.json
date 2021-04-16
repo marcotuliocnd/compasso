@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/marcotuliocnd/compasso/issues"
   },
-  "homepage": "https://github.com/marcotuliocnd/compasso#readme"
+  "homepage": "https://github.com/marcotuliocnd/compasso#readme",
+  "devDependencies": {
+    "git-commit-msg-linter": "^3.1.0"
+  }
 }
