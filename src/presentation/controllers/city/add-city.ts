@@ -6,14 +6,17 @@ import {
   Controller,
   StateValidator,
   InvalidParamError,
-  serverError
+  serverError,
+  AddCity
 } from './add-city-protocols'
 
 export class AddCityController implements Controller {
   private readonly stateValidator: StateValidator
+  private readonly addCity: AddCity
 
-  constructor (stateValidator: StateValidator) {
+  constructor (stateValidator: StateValidator, addCity: AddCity) {
     this.stateValidator = stateValidator
+    this.addCity = addCity
   }
 
   handle (httpRequest: HttpRequest): HttpResponse {
@@ -29,6 +32,11 @@ export class AddCityController implements Controller {
       if (!isValid) {
         return badRequest(new InvalidParamError('state'))
       }
+
+      this.addCity.add({
+        name: httpRequest.body.name,
+        state: httpRequest.body.state
+      })
 
       return {
         body: null,

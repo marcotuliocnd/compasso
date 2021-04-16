@@ -1,3 +1,5 @@
+export { AddCity, AddCityModel } from '../../../domain/usecases/city/add-city'
+export { CityModel } from '../../../domain/models/city'
 export { ServerError } from '../../errors/server-errors'
 export { HttpRequest, HttpResponse } from '../../protocols/http'
 export { MissingParamError } from '../../errors/missing-param-errors'
