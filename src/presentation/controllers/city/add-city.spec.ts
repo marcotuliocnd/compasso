@@ -1,5 +1,10 @@
 import { AddCityController } from './add-city'
-import { MissingParamError, InvalidParamError, StateValidator } from './add-city-protocols'
+import {
+  MissingParamError,
+  InvalidParamError,
+  StateValidator,
+  ServerError
+} from './add-city-protocols'
 
 interface SutTypes {
   sut: AddCityController
@@ -82,5 +87,24 @@ describe('AddCityController', () => {
 
     sut.handle(httpRequest)
     expect(isValidSpy).toHaveBeenCalledWith('any_state')
+  })
+
+  test('Should return 500 if StateValidator throws', () => {
+    const { sut, stateValidatorStub } = makeSut()
+
+    jest.spyOn(stateValidatorStub, 'isValid').mockImplementation(() => {
+      throw new Error()
+    })
+
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        state: 'invalid_state'
+      }
+    }
+
+    const httpResponse = sut.handle(httpRequest)
+    expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body).toEqual(new ServerError())
   })
 })
