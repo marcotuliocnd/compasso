@@ -1,5 +1,7 @@
+import { HttpRequest, HttpResponse } from '../../protocols/http'
+
 export class AddCityController {
-  handle (httpRequest: any): any {
+  handle (httpRequest: HttpRequest): HttpResponse {
     if (!httpRequest.body.name) {
       return {
         statusCode: 400,
@@ -12,6 +14,11 @@ export class AddCityController {
         statusCode: 400,
         body: new Error('Missing param: state')
       }
+    }
+
+    return {
+      body: null,
+      statusCode: 200
     }
   }
 }
