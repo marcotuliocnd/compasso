@@ -1,4 +1,6 @@
 export { HttpRequest, HttpResponse } from '../../protocols/http'
 export { MissingParamError } from '../../errors/missing-param-errors'
+export { InvalidParamError } from '../../errors/invalid-param-errors'
 export { badRequest } from '../../helpers/http-helper'
 export { Controller } from '../../protocols/controller'
+export { StateValidator } from '../../protocols/state-validator'
