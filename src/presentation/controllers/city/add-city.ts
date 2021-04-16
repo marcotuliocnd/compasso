@@ -6,7 +6,7 @@ import {
   Controller,
   StateValidator,
   InvalidParamError,
-  ServerError
+  serverError
 } from './add-city-protocols'
 
 export class AddCityController implements Controller {
@@ -35,10 +35,7 @@ export class AddCityController implements Controller {
         statusCode: 200
       }
     } catch (error) {
-      return {
-        statusCode: 500,
-        body: new ServerError()
-      }
+      return serverError()
     }
   }
 }
