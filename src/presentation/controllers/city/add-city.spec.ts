@@ -1,9 +1,21 @@
 import { AddCityController } from './add-city'
 import { MissingParamError } from './add-city-protocols'
 
+interface SutTypes {
+  sut: AddCityController
+}
+
+const makeSut = (): SutTypes => {
+  const sut = new AddCityController()
+
+  return {
+    sut
+  }
+}
+
 describe('AddCityController', () => {
   test('Should return 400 if no name is provided', () => {
-    const sut = new AddCityController()
+    const { sut } = makeSut()
 
     const httpRequest = {
       body: {
@@ -17,7 +29,7 @@ describe('AddCityController', () => {
   })
 
   test('Should return 400 if no state is provided', () => {
-    const sut = new AddCityController()
+    const { sut } = makeSut()
 
     const httpRequest = {
       body: {
