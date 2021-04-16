@@ -67,4 +67,20 @@ describe('AddCityController', () => {
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body).toEqual(new InvalidParamError('state'))
   })
+
+  test('Should call StateValidator with correct state', () => {
+    const { sut, stateValidatorStub } = makeSut()
+
+    const isValidSpy = jest.spyOn(stateValidatorStub, 'isValid')
+
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        state: 'any_state'
+      }
+    }
+
+    sut.handle(httpRequest)
+    expect(isValidSpy).toHaveBeenCalledWith('any_state')
+  })
 })
