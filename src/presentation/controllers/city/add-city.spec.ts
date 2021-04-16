@@ -11,14 +11,18 @@ interface SutTypes {
   stateValidatorStub: StateValidator
 }
 
-const makeSut = (): SutTypes => {
+const makeStateValidator = (): StateValidator => {
   class StateValidatorStub implements StateValidator {
     isValid (state: string): boolean {
       return true
     }
   }
 
-  const stateValidatorStub = new StateValidatorStub()
+  return new StateValidatorStub()
+}
+
+const makeSut = (): SutTypes => {
+  const stateValidatorStub = makeStateValidator()
   const sut = new AddCityController(stateValidatorStub)
 
   return {
