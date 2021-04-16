@@ -28,14 +28,16 @@ export class AddCityController implements Controller {
         }
       }
 
-      const isValid = this.stateValidator.isValid(httpRequest.body.state)
+      const { name, state } = httpRequest.body
+
+      const isValid = this.stateValidator.isValid(state)
       if (!isValid) {
         return badRequest(new InvalidParamError('state'))
       }
 
       this.addCity.add({
-        name: httpRequest.body.name,
-        state: httpRequest.body.state
+        name,
+        state
       })
 
       return {
