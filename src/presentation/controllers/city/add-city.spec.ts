@@ -1,4 +1,5 @@
 import { AddCityController } from './add-city'
+import { MissingParamError } from '../../errors/missing-param-errors'
 
 describe('AddCityController', () => {
   test('Should return 400 if no name is provided', () => {
@@ -12,7 +13,7 @@ describe('AddCityController', () => {
 
     const httpResponse = sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
-    expect(httpResponse.body).toEqual(new Error('Missing param: name'))
+    expect(httpResponse.body).toEqual(new MissingParamError('name'))
   })
 
   test('Should return 400 if no state is provided', () => {
@@ -26,6 +27,6 @@ describe('AddCityController', () => {
 
     const httpResponse = sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
-    expect(httpResponse.body).toEqual(new Error('Missing param: state'))
+    expect(httpResponse.body).toEqual(new MissingParamError('state'))
   })
 })
