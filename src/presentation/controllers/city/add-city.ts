@@ -1,7 +1,4 @@
-import { HttpRequest, HttpResponse } from '../../protocols/http'
-import { MissingParamError } from '../../errors/missing-param-errors'
-import { badRequest } from '../../helpers/http-helper'
-import { Controller } from '../../protocols/controller'
+import { HttpRequest, HttpResponse, MissingParamError, badRequest, Controller } from './add-city-protocols'
 
 export class AddCityController implements Controller {
   handle (httpRequest: HttpRequest): HttpResponse {

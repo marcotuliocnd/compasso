@@ -1,5 +1,5 @@
 import { AddCityController } from './add-city'
-import { MissingParamError } from '../../errors/missing-param-errors'
+import { MissingParamError } from './add-city-protocols'
 
 describe('AddCityController', () => {
   test('Should return 400 if no name is provided', () => {
