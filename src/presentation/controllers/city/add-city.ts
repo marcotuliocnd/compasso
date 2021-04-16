@@ -5,7 +5,8 @@ import {
   badRequest,
   Controller,
   StateValidator,
-  InvalidParamError
+  InvalidParamError,
+  ServerError
 } from './add-city-protocols'
 
 export class AddCityController implements Controller {
@@ -16,21 +17,28 @@ export class AddCityController implements Controller {
   }
 
   handle (httpRequest: HttpRequest): HttpResponse {
-    const requiredFields = ['name', 'state']
-    for (const field of requiredFields) {
-      if (!httpRequest.body[field]) {
-        return badRequest(new MissingParamError(field))
+    try {
+      const requiredFields = ['name', 'state']
+      for (const field of requiredFields) {
+        if (!httpRequest.body[field]) {
+          return badRequest(new MissingParamError(field))
+        }
       }
-    }
 
-    const isValid = this.stateValidator.isValid(httpRequest.body.state)
-    if (!isValid) {
-      return badRequest(new InvalidParamError('state'))
-    }
+      const isValid = this.stateValidator.isValid(httpRequest.body.state)
+      if (!isValid) {
+        return badRequest(new InvalidParamError('state'))
+      }
 
-    return {
-      body: null,
-      statusCode: 200
+      return {
+        body: null,
+        statusCode: 200
+      }
+    } catch (error) {
+      return {
+        statusCode: 500,
+        body: new ServerError()
+      }
     }
   }
 }

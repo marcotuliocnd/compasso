@@ -1,3 +1,4 @@
+export { ServerError } from '../../errors/server-errors'
 export { HttpRequest, HttpResponse } from '../../protocols/http'
 export { MissingParamError } from '../../errors/missing-param-errors'
 export { InvalidParamError } from '../../errors/invalid-param-errors'
