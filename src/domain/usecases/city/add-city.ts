@@ -6,5 +6,5 @@ export interface AddCityModel {
 }
 
 export interface AddCity {
-  add: (city: AddCityModel) => CityModel
+  add: (city: AddCityModel) => Promise<CityModel>
 }
