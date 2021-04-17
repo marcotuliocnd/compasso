@@ -35,13 +35,13 @@ export class AddCityController implements Controller {
         return badRequest(new InvalidParamError('state'))
       }
 
-      this.addCity.add({
+      const city = this.addCity.add({
         name,
         state
       })
 
       return {
-        body: null,
+        body: city,
         statusCode: 200
       }
     } catch (error) {
