@@ -7,7 +7,8 @@ import {
   StateValidator,
   InvalidParamError,
   serverError,
-  AddCity
+  AddCity,
+  ok
 } from './add-city-protocols'
 
 export class AddCityController implements Controller {
@@ -40,10 +41,7 @@ export class AddCityController implements Controller {
         state
       })
 
-      return {
-        body: city,
-        statusCode: 200
-      }
+      return ok(city)
     } catch (error) {
       return serverError()
     }
