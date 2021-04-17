@@ -14,4 +14,12 @@ describe('StateValidator Adapter', () => {
     const isValid = sut.isValid('any_state')
     expect(isValid).toBe(true)
   })
+
+  test('Should call validator with correct values', () => {
+    const sut = new StateValidatorAdapter()
+    const validatorSpy = jest.spyOn(sut, 'validator').mockImplementationOnce(() => true)
+
+    sut.isValid('any_state')
+    expect(validatorSpy).toHaveBeenCalledWith('any_state')
+  })
 })
