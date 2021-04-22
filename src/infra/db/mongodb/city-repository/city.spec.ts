@@ -14,6 +14,11 @@ describe('City Mongo Repository', () => {
     await MongoHelper.disconnect()
   })
 
+  beforeEach(async () => {
+    const cityCollection = MongoHelper.getCollection('cities')
+    await cityCollection.deleteMany({})
+  })
+
   test('Should return a city on success', async () => {
     const sut = makeSut()
     const city = await sut.add({
