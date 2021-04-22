@@ -45,5 +45,8 @@
       "pre-commit": "lint-staged",
       "pre-push": "npm run test:ci"
     }
+  },
+  "dependencies": {
+    "mongodb": "^3.6.6"
   }
 }
