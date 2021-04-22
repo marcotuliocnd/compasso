@@ -7,8 +7,8 @@ export class DbAddCity implements AddCity {
     this.addCityRepository = addCityRepository
   }
 
-  async add (city: AddCityModel): Promise<CityModel | null> {
-    await this.addCityRepository.add(city)
-    return await new Promise(resolve => resolve(null))
+  async add (city: AddCityModel): Promise<CityModel> {
+    const createdCity = await this.addCityRepository.add(city)
+    return createdCity
   }
 }
