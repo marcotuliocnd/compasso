@@ -8,9 +8,6 @@ export class CityMongoRepository implements AddCityRepository {
     const cityCollection = MongoHelper.getCollection('cities')
 
     const result = await cityCollection.insertOne(cityData)
-    const city = result.ops[0]
-    const { _id, ...cityWithoutId } = city
-
-    return Object.assign({}, cityWithoutId, { id: _id })
+    return MongoHelper.map(result.ops[0])
   }
 }
