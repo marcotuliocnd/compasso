@@ -4,9 +4,9 @@ const makeAddCityRepositoryStub = (): AddCityRepository => {
   class AddCityRepositoryStub implements AddCityRepository {
     async add (cityData: AddCityModel): Promise<CityModel> {
       const fakeCity = {
-        id: 'any_id',
-        name: 'any_name',
-        state: 'any_state'
+        id: 'valid_id',
+        name: 'valid_name',
+        state: 'valid_state'
       }
       return await new Promise(resolve => resolve(fakeCity))
     }
@@ -58,5 +58,21 @@ describe('DbAddCity Usecase', () => {
 
     const promise = sut.add(cityData)
     await expect(promise).rejects.toThrow()
+  })
+
+  test('Should return a city on success', async () => {
+    const { sut } = makeSut()
+
+    const cityData = {
+      name: 'valid_name',
+      state: 'valid_state'
+    }
+
+    const city = await sut.add(cityData)
+    expect(city).toEqual({
+      id: 'valid_id',
+      name: 'valid_name',
+      state: 'valid_state'
+    })
   })
 })
