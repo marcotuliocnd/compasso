@@ -1,6 +1,4 @@
-import { CityModel } from '../../../domain/models/city'
-import { AddCity, AddCityModel } from '../../../domain/usecases/city/add-city'
-import { AddCityRepository } from '../../protocols/add-city-repository'
+import { CityModel, AddCity, AddCityModel, AddCityRepository } from './db-add-city-protocols'
 
 export class DbAddCity implements AddCity {
   private readonly addCityRepository: AddCityRepository

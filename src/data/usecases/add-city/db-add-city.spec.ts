@@ -1,7 +1,4 @@
-import { AddCityRepository } from '../../protocols/add-city-repository'
-import { CityModel } from '../../../domain/models/city'
-import { DbAddCity } from './db-add-city'
-import { AddCityModel } from '../../../domain/usecases/city/add-city'
+import { AddCityRepository, CityModel, DbAddCity, AddCityModel } from './db-add-city-protocols'
 
 const makeAddCityRepositoryStub = (): AddCityRepository => {
   class AddCityRepositoryStub implements AddCityRepository {
