@@ -1,6 +1,10 @@
 import { MongoHelper } from '../helpers/mongo-helper'
 import { CityMongoRepository } from './city'
 
+const makeSut = (): CityMongoRepository => {
+  return new CityMongoRepository()
+}
+
 describe('City Mongo Repository', () => {
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGO_URL ?? '')
@@ -11,7 +15,7 @@ describe('City Mongo Repository', () => {
   })
 
   test('Should return a city on success', async () => {
-    const sut = new CityMongoRepository()
+    const sut = makeSut()
     const city = await sut.add({
       name: 'any_name',
       state: 'any_state'
