@@ -14,17 +14,34 @@ const makeFakeCities = (): CityModel[] => {
   }]
 }
 
+const makeListCitiesRepositoryStub = (): ListCitiesRepository => {
+  class ListCitiesRepositoryStub implements ListCitiesRepository {
+    async list (params?: any): Promise<CityModel[]> {
+      return await new Promise(resolve => resolve(makeFakeCities()))
+    }
+  }
+
+  return new ListCitiesRepositoryStub()
+}
+
+interface SutTypes {
+  sut: DbListCities
+  listCitiesRepositoryStub: ListCitiesRepository
+}
+
+const makeSut = (): SutTypes => {
+  const listCitiesRepositoryStub = makeListCitiesRepositoryStub()
+  const sut = new DbListCities(listCitiesRepositoryStub)
+  return {
+    listCitiesRepositoryStub,
+    sut
+  }
+}
+
 describe('DbListCities', () => {
   test('Should call ListCitiesRepository with correct values', async () => {
-    class ListCitiesRepositoryStub implements ListCitiesRepository {
-      async list (params?: any): Promise<CityModel[]> {
-        return await new Promise(resolve => resolve(makeFakeCities()))
-      }
-    }
-
-    const listCititesRepositoryStub = new ListCitiesRepositoryStub()
-    const listSpy = jest.spyOn(listCititesRepositoryStub, 'list')
-    const sut = new DbListCities(listCititesRepositoryStub)
+    const { sut, listCitiesRepositoryStub } = makeSut()
+    const listSpy = jest.spyOn(listCitiesRepositoryStub, 'list')
 
     const params = {
       name: 'any_name',
