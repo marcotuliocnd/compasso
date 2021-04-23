@@ -6,7 +6,7 @@ export class DbListCities implements ListCities {
   constructor (private readonly listCitiesRepository: ListCitiesRepository) {}
 
   async list (params: any = {}): Promise<CityModel[]> {
-    await this.listCitiesRepository.list(params)
-    return []
+    const cities = await this.listCitiesRepository.list(params)
+    return cities
   }
 }
