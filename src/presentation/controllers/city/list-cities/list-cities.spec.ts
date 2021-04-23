@@ -1,5 +1,5 @@
 import { ListCitiesController } from './list-cities'
-import { CityModel, ListCities } from './list-cities-protocols'
+import { CityModel, ListCities, ok } from './list-cities-protocols'
 
 const makeFakeCities = (): CityModel[] => {
   return [{
@@ -53,5 +53,11 @@ describe('ListCity Controller', () => {
       name: 'any_name',
       state: 'any_state'
     })
+  })
+
+  test('Sould return 200 on success', async () => {
+    const { sut } = makeSut()
+    const httpResponse = await sut.handle({})
+    expect(httpResponse).toEqual(ok(makeFakeCities()))
   })
 })
