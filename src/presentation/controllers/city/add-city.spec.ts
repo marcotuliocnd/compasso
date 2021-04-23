@@ -64,7 +64,9 @@ describe('AddCityController', () => {
 
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
-    expect(httpResponse.body).toEqual(new MissingParamError('name'))
+    expect(httpResponse.body).toEqual({
+      error: new MissingParamError('name').message
+    })
   })
 
   test('Should return 400 if no state is provided', async () => {
@@ -78,7 +80,9 @@ describe('AddCityController', () => {
 
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
-    expect(httpResponse.body).toEqual(new MissingParamError('state'))
+    expect(httpResponse.body).toEqual({
+      error: new MissingParamError('state').message
+    })
   })
 
   test('Should return 400 if an invalid state is provided', async () => {
@@ -95,7 +99,9 @@ describe('AddCityController', () => {
 
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
-    expect(httpResponse.body).toEqual(new InvalidParamError('state'))
+    expect(httpResponse.body).toEqual({
+      error: new InvalidParamError('state').message
+    })
   })
 
   test('Should call StateValidator with correct state', async () => {
@@ -130,7 +136,9 @@ describe('AddCityController', () => {
 
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(500)
-    expect(httpResponse.body).toEqual(new ServerError())
+    expect(httpResponse.body).toEqual({
+      error: new ServerError().message
+    })
   })
 
   test('Should call AddCity with correct values', async () => {
@@ -168,7 +176,9 @@ describe('AddCityController', () => {
 
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(500)
-    expect(httpResponse.body).toEqual(new ServerError())
+    expect(httpResponse.body).toEqual({
+      error: new ServerError().message
+    })
   })
 
   test('Should return 200 if all provided are correct', async () => {
