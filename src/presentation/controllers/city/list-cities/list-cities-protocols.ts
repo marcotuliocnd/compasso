@@ -1,4 +1,4 @@
-export { ok } from './../../../helpers/http-helper'
+export { ok, serverError } from './../../../helpers/http-helper'
 export { HttpRequest, HttpResponse } from '../../../protocols/http'
 export { Controller } from '../../../protocols/controller'
 export { CityModel } from '../../../../domain/models/city'
