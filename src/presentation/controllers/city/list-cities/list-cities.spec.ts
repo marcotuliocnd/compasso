@@ -13,17 +13,34 @@ const makeFakeCities = (): CityModel[] => {
   }]
 }
 
+const makeListCitiesStub = (): ListCities => {
+  class ListCitiesStub implements ListCities {
+    async list (params: any = {}): Promise<CityModel[]> {
+      return await new Promise(resolve => resolve(makeFakeCities()))
+    }
+  }
+
+  return new ListCitiesStub()
+}
+
+interface SutTypes {
+  sut: ListCitiesController
+  listCitiesStub: ListCities
+}
+
+const makeSut = (): SutTypes => {
+  const listCitiesStub = makeListCitiesStub()
+  const sut = new ListCitiesController(listCitiesStub)
+  return {
+    listCitiesStub,
+    sut
+  }
+}
+
 describe('ListCity Controller', () => {
   test('Shoud call ListCities with correct values', async () => {
-    class ListCitiesStub implements ListCities {
-      async list (params: any = {}): Promise<CityModel[]> {
-        return await new Promise(resolve => resolve(makeFakeCities()))
-      }
-    }
-
-    const listCitiesStub = new ListCitiesStub()
+    const { sut, listCitiesStub } = makeSut()
     const listSpy = jest.spyOn(listCitiesStub, 'list')
-    const sut = new ListCitiesController(listCitiesStub)
     const httpRequest = {
       params: {
         name: 'any_name',
