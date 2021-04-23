@@ -55,4 +55,17 @@ describe('DbListCities', () => {
       state: 'any_state'
     })
   })
+
+  test('Should return a list of Cities on success', async () => {
+    const { sut } = makeSut()
+
+    const params = {
+      name: 'any_name',
+      state: 'any_state'
+    }
+
+    const cities = await sut.list(params)
+
+    expect(cities).toEqual(makeFakeCities())
+  })
 })
