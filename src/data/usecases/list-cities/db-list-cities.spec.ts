@@ -68,4 +68,18 @@ describe('DbListCities', () => {
 
     expect(cities).toEqual(makeFakeCities())
   })
+
+  test('Should throw if ListCitiesRepository throws', async () => {
+    const { sut, listCitiesRepositoryStub } = makeSut()
+    jest.spyOn(listCitiesRepositoryStub, 'list').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+
+    const params = {
+      name: 'any_name',
+      state: 'any_state'
+    }
+
+    const promise = sut.list(params)
+
+    await expect(promise).rejects.toThrow()
+  })
 })
