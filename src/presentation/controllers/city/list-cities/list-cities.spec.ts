@@ -1,5 +1,5 @@
 import { ListCitiesController } from './list-cities'
-import { CityModel, ListCities, ok } from './list-cities-protocols'
+import { CityModel, ListCities, ok, serverError } from './list-cities-protocols'
 
 const makeFakeCities = (): CityModel[] => {
   return [{
@@ -59,5 +59,12 @@ describe('ListCity Controller', () => {
     const { sut } = makeSut()
     const httpResponse = await sut.handle({})
     expect(httpResponse).toEqual(ok(makeFakeCities()))
+  })
+
+  test('Sould return 500 if ListCities throws', async () => {
+    const { sut, listCitiesStub } = makeSut()
+    jest.spyOn(listCitiesStub, 'list').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+    const httpResponse = await sut.handle({})
+    expect(httpResponse).toEqual(serverError())
   })
 })
