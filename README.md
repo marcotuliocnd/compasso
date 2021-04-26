@@ -21,7 +21,7 @@ Projeto desenvolvido usando uma **arquitetura limpa** de NodeJS e TypeScript, ut
 
 - NodeJS
 - TypeScript
-- Postgres
+- MongoDB
 
 - Outros
   - Conventional Commits
