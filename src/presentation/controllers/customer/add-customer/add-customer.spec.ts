@@ -10,7 +10,7 @@ interface SutTypes {
   findOneCityStub: FindOneCity
 }
 
-const makeSut = (): SutTypes => {
+const makeFindOneCityStub = (): FindOneCity => {
   class FindOneCityStub implements FindOneCity {
     async findBy (params: FindOneCityModel = {}): Promise<CityModel> {
       return await new Promise(resolve => resolve({
@@ -20,7 +20,11 @@ const makeSut = (): SutTypes => {
       }))
     }
   }
-  const findOneCityStub = new FindOneCityStub()
+  return new FindOneCityStub()
+}
+
+const makeSut = (): SutTypes => {
+  const findOneCityStub = makeFindOneCityStub()
   const sut = new AddCustomerController(findOneCityStub)
   return {
     sut,
