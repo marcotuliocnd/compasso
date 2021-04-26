@@ -5,7 +5,7 @@ export class ListCitiesController implements Controller {
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
-      const cities = await this.listCities.list(httpRequest.params)
+      const cities = await this.listCities.list(httpRequest.queryParams)
       return ok(cities)
     } catch (error) {
       return serverError()
