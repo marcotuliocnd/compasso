@@ -4,7 +4,8 @@ import {
   CityModel,
   AddCustomerController,
   HttpRequest,
-  MissingParamError
+  MissingParamError,
+  InvalidParamError
 } from './add-customer-protocols'
 
 interface SutTypes {
@@ -164,6 +165,27 @@ describe('AddCustomerController', () => {
     expect(httpResponse.statusCode).toBe(500)
     expect(httpResponse.body).toEqual({
       error: new ServerError().message
+    })
+  })
+
+  test('Should return 404 if FindOneCity returns null', async () => {
+    const { sut, findOneCityStub } = makeSut()
+    jest.spyOn(findOneCityStub, 'findBy').mockReturnValueOnce(new Promise((resolve) => resolve(null)))
+
+    const httpRequest: HttpRequest = {
+      body: {
+        name: 'any_name',
+        gender: 'any_gender',
+        age: 'any_age',
+        city: 'any_city',
+        birthdate_at: 'any_date'
+      }
+    }
+
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse.statusCode).toBe(404)
+    expect(httpResponse.body).toEqual({
+      error: new InvalidParamError('city').message
     })
   })
 })
