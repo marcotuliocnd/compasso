@@ -27,6 +27,6 @@ export class CityMongoRepository implements AddCityRepository, ListCitiesReposit
     const { id, ...paramsWithoutId } = params
     const paramsWithId = Object.assign({}, paramsWithoutId, { _id: id })
     const city: CityModel = await cityCollection.findOne(paramsWithId)
-    return MongoHelper.map(city)
+    return city ? MongoHelper.map(city) : null
   }
 }
