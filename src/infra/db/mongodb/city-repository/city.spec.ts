@@ -107,4 +107,29 @@ describe('City Mongo Repository', () => {
       expect(cities.length).toBe(0)
     })
   })
+
+  describe('findBy', () => {
+    test('Should return one city with the provided params', async () => {
+      const result = await cityCollection.insertMany([
+        {
+          name: 'any_name',
+          state: 'any_state'
+        },
+        {
+          name: 'other_name',
+          state: 'other_state'
+        }
+      ])
+
+      const sut = makeSut()
+      const city = await sut.findBy({
+        id: result.ops[0]._id
+      })
+
+      expect(city).toBeTruthy()
+      expect(city?.id).toEqual(result.ops[0]._id)
+      expect(city?.name).toBe('any_name')
+      expect(city?.state).toBe('any_state')
+    })
+  })
 })
