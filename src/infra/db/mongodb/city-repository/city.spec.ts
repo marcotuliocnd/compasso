@@ -96,4 +96,11 @@ describe('City Mongo Repository', () => {
     expect(cities.length).toBe(1)
     expect(cities[0].state).toBe('other_state')
   })
+
+  test('Should return empty list', async () => {
+    const sut = makeSut()
+    const cities = await sut.list()
+
+    expect(cities.length).toBe(0)
+  })
 })
