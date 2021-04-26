@@ -6,7 +6,7 @@ export class DbFindOneCity implements FindOneCity {
   constructor (private readonly findByCityRepostiory: FindByCityRepository) {}
 
   async findBy (params: FindOneCityModel): Promise<CityModel | null> {
-    await this.findByCityRepostiory.findBy(params)
-    return null
+    const city = await this.findByCityRepostiory.findBy(params)
+    return city
   }
 }
