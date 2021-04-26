@@ -19,88 +19,92 @@ describe('City Mongo Repository', () => {
     await cityCollection.deleteMany({})
   })
 
-  test('Should return a city on success', async () => {
-    const sut = makeSut()
-    const city = await sut.add({
-      name: 'any_name',
-      state: 'any_state'
-    })
-
-    expect(city).toBeTruthy()
-    expect(city.id).toBeTruthy()
-    expect(city.name).toBe('any_name')
-    expect(city.state).toBe('any_state')
-  })
-
-  test('Should return all cities if no params is passed', async () => {
-    const cityCollection = MongoHelper.getCollection('cities')
-    await cityCollection.insertMany([
-      {
+  describe('add', () => {
+    test('Should return a city on success', async () => {
+      const sut = makeSut()
+      const city = await sut.add({
         name: 'any_name',
         state: 'any_state'
-      },
-      {
-        name: 'other_name',
-        state: 'other_state'
-      }
-    ])
+      })
 
-    const sut = makeSut()
-    const cities = await sut.list()
-
-    expect(cities.length).toBe(2)
-    expect(cities[0].name).toBe('any_name')
-    expect(cities[1].name).toBe('other_name')
+      expect(city).toBeTruthy()
+      expect(city.id).toBeTruthy()
+      expect(city.name).toBe('any_name')
+      expect(city.state).toBe('any_state')
+    })
   })
 
-  test('Should return only cities with the provided name', async () => {
-    const cityCollection = MongoHelper.getCollection('cities')
-    await cityCollection.insertMany([
-      {
-        name: 'any_name',
-        state: 'any_state'
-      },
-      {
-        name: 'other_name',
-        state: 'other_state'
-      }
-    ])
+  describe('list', () => {
+    test('Should return all cities if no params is passed', async () => {
+      const cityCollection = MongoHelper.getCollection('cities')
+      await cityCollection.insertMany([
+        {
+          name: 'any_name',
+          state: 'any_state'
+        },
+        {
+          name: 'other_name',
+          state: 'other_state'
+        }
+      ])
 
-    const sut = makeSut()
-    const cities = await sut.list({
-      name: 'any_name'
+      const sut = makeSut()
+      const cities = await sut.list()
+
+      expect(cities.length).toBe(2)
+      expect(cities[0].name).toBe('any_name')
+      expect(cities[1].name).toBe('other_name')
     })
 
-    expect(cities.length).toBe(1)
-    expect(cities[0].name).toBe('any_name')
-  })
+    test('Should return only cities with the provided name', async () => {
+      const cityCollection = MongoHelper.getCollection('cities')
+      await cityCollection.insertMany([
+        {
+          name: 'any_name',
+          state: 'any_state'
+        },
+        {
+          name: 'other_name',
+          state: 'other_state'
+        }
+      ])
 
-  test('Should return only cities with the provided state', async () => {
-    const cityCollection = MongoHelper.getCollection('cities')
-    await cityCollection.insertMany([
-      {
-        name: 'any_name',
-        state: 'any_state'
-      },
-      {
-        name: 'other_name',
-        state: 'other_state'
-      }
-    ])
+      const sut = makeSut()
+      const cities = await sut.list({
+        name: 'any_name'
+      })
 
-    const sut = makeSut()
-    const cities = await sut.list({
-      state: 'other_state'
+      expect(cities.length).toBe(1)
+      expect(cities[0].name).toBe('any_name')
     })
 
-    expect(cities.length).toBe(1)
-    expect(cities[0].state).toBe('other_state')
-  })
+    test('Should return only cities with the provided state', async () => {
+      const cityCollection = MongoHelper.getCollection('cities')
+      await cityCollection.insertMany([
+        {
+          name: 'any_name',
+          state: 'any_state'
+        },
+        {
+          name: 'other_name',
+          state: 'other_state'
+        }
+      ])
 
-  test('Should return empty list', async () => {
-    const sut = makeSut()
-    const cities = await sut.list()
+      const sut = makeSut()
+      const cities = await sut.list({
+        state: 'other_state'
+      })
 
-    expect(cities.length).toBe(0)
+      expect(cities.length).toBe(1)
+      expect(cities[0].state).toBe('other_state')
+    })
+
+    test('Should return empty list', async () => {
+      const sut = makeSut()
+      const cities = await sut.list()
+
+      expect(cities.length).toBe(0)
+    })
   })
 })
