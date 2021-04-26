@@ -7,5 +7,5 @@ export interface FindOneCityModel {
 }
 
 export interface FindOneCity {
-  findBy: (params: FindOneCityModel) => Promise<CityModel>
+  findBy: (params: FindOneCityModel) => Promise<CityModel | null>
 }
