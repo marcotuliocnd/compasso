@@ -31,4 +31,25 @@ describe('City Mongo Repository', () => {
     expect(city.name).toBe('any_name')
     expect(city.state).toBe('any_state')
   })
+
+  test('Should return all cities if no params is passed', async () => {
+    const cityCollection = MongoHelper.getCollection('cities')
+    await cityCollection.insertMany([
+      {
+        name: 'any_name',
+        state: 'any_state'
+      },
+      {
+        name: 'other_name',
+        state: 'other_state'
+      }
+    ])
+
+    const sut = makeSut()
+    const cities = await sut.list()
+
+    expect(cities.length).toBe(2)
+    expect(cities[0].name).toBe('any_name')
+    expect(cities[1].name).toBe('other_name')
+  })
 })
