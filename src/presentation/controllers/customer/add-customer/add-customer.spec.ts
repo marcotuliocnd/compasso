@@ -1,15 +1,29 @@
+import { FindOneCity, FindOneCityModel } from './../../../../domain/usecases/city/find-one-city'
+import { CityModel } from './../../../../domain/models/city'
 import { AddCustomerController } from './add-customer'
 import { HttpRequest } from './../../../protocols/http'
 import { MissingParamError } from './../../../errors/missing-param-errors'
 
 interface SutTypes {
   sut: AddCustomerController
+  findOneCityStub: FindOneCity
 }
 
 const makeSut = (): SutTypes => {
-  const sut = new AddCustomerController()
+  class FindOneCityStub implements FindOneCity {
+    async findBy (params: FindOneCityModel = {}): Promise<CityModel> {
+      return await new Promise(resolve => resolve({
+        id: 'any_id',
+        name: 'any_name',
+        state: 'any_state'
+      }))
+    }
+  }
+  const findOneCityStub = new FindOneCityStub()
+  const sut = new AddCustomerController(findOneCityStub)
   return {
-    sut
+    sut,
+    findOneCityStub
   }
 }
 
@@ -101,6 +115,27 @@ describe('AddCustomerController', () => {
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body).toEqual({
       error: new MissingParamError('city').message
+    })
+  })
+
+  test('Should call FindOneCity with correct value', async () => {
+    const { sut, findOneCityStub } = makeSut()
+
+    const findBySpy = jest.spyOn(findOneCityStub, 'findBy')
+
+    const httpRequest: HttpRequest = {
+      body: {
+        name: 'any_name',
+        gender: 'any_gender',
+        age: 'any_age',
+        city: 'any_city',
+        birthdate_at: 'any_date'
+      }
+    }
+
+    await sut.handle(httpRequest)
+    expect(findBySpy).toHaveBeenCalledWith({
+      id: 'any_city'
     })
   })
 })
