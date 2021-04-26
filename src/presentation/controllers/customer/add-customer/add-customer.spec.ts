@@ -1,9 +1,11 @@
-import { ServerError } from './../../../errors/server-errors'
-import { FindOneCity, FindOneCityModel } from './../../../../domain/usecases/city/find-one-city'
-import { CityModel } from './../../../../domain/models/city'
-import { AddCustomerController } from './add-customer'
-import { HttpRequest } from './../../../protocols/http'
-import { MissingParamError } from './../../../errors/missing-param-errors'
+import {
+  ServerError,
+  FindOneCity, FindOneCityModel,
+  CityModel,
+  AddCustomerController,
+  HttpRequest,
+  MissingParamError
+} from './add-customer-protocols'
 
 interface SutTypes {
   sut: AddCustomerController

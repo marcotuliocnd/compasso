@@ -1,8 +1,12 @@
-import { FindOneCity } from './../../../../domain/usecases/city/find-one-city'
-import { MissingParamError } from './../../../errors/missing-param-errors'
-import { badRequest, serverError } from './../../../helpers/http-helper'
-import { HttpRequest, HttpResponse } from './../../../protocols/http'
-import { Controller } from './../../../protocols/controller'
+import {
+  FindOneCity,
+  HttpRequest,
+  MissingParamError,
+  Controller,
+  badRequest,
+  serverError,
+  HttpResponse
+} from './add-customer-protocols'
 
 export class AddCustomerController implements Controller {
   constructor (private readonly findOneCity: FindOneCity) { }
