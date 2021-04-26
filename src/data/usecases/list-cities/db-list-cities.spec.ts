@@ -39,7 +39,7 @@ const makeSut = (): SutTypes => {
   }
 }
 
-describe('DbListCities', () => {
+describe('DbListCities Usecase', () => {
   test('Should call ListCitiesRepository with correct values', async () => {
     const { sut, listCitiesRepositoryStub } = makeSut()
     const listSpy = jest.spyOn(listCitiesRepositoryStub, 'list')
@@ -120,5 +120,14 @@ describe('DbListCities', () => {
       name: 'any_name',
       state: 'any_state'
     })
+  })
+
+  test('Should get default params value if no params is passed', async () => {
+    const { sut } = makeSut()
+    const listSpy = jest.spyOn(sut, 'list')
+
+    await sut.list()
+
+    expect(listSpy).toBeCalledWith()
   })
 })
