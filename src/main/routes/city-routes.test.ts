@@ -25,4 +25,10 @@ describe('City Routes', () => {
       })
       .expect(200)
   })
+
+  test('Should return a list of cities on success', async () => {
+    await request(app)
+      .get('/v1/cities')
+      .expect(200)
+  })
 })
