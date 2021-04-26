@@ -236,4 +236,25 @@ describe('AddCustomerController', () => {
       birthdate_at: 'any_date'
     })
   })
+
+  test('Should return 500 if AddCustomer throws', async () => {
+    const { sut, addCustomerStub } = makeSut()
+    jest.spyOn(addCustomerStub, 'add').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+
+    const httpRequest: HttpRequest = {
+      body: {
+        name: 'any_name',
+        gender: 'any_gender',
+        age: 'any_age',
+        city: 'any_city',
+        birthdate_at: 'any_date'
+      }
+    }
+
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body).toEqual({
+      error: new ServerError().message
+    })
+  })
 })
