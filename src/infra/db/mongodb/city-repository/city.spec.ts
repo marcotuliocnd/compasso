@@ -146,7 +146,7 @@ describe('City Mongo Repository', () => {
 
       const sut = makeSut()
       const city = await sut.findBy({
-        id: 'any_id'
+        name: 'missing_name'
       })
 
       expect(city).toBe(null)
