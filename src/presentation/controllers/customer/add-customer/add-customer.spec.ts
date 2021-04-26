@@ -5,12 +5,33 @@ import {
   AddCustomerController,
   HttpRequest,
   MissingParamError,
-  InvalidParamError
+  InvalidParamError,
+  CustomerModel,
+  AddCustomer,
+  AddCustomerModel
 } from './add-customer-protocols'
 
 interface SutTypes {
   sut: AddCustomerController
   findOneCityStub: FindOneCity
+  addCustomerStub: AddCustomer
+}
+
+const makeAddCustomerStub = (): AddCustomer => {
+  class AddCustomerStub implements AddCustomer {
+    async add (customer: AddCustomerModel): Promise<CustomerModel> {
+      const fakeCustomer: CustomerModel = {
+        id: 'any_id',
+        age: 'any_age',
+        birthdate_at: 'any_date',
+        city: 'any_city',
+        gender: 'any_gender',
+        name: 'any_name'
+      }
+      return await new Promise(resolve => resolve(fakeCustomer))
+    }
+  }
+  return new AddCustomerStub()
 }
 
 const makeFindOneCityStub = (): FindOneCity => {
@@ -28,10 +49,12 @@ const makeFindOneCityStub = (): FindOneCity => {
 
 const makeSut = (): SutTypes => {
   const findOneCityStub = makeFindOneCityStub()
-  const sut = new AddCustomerController(findOneCityStub)
+  const addCustomerStub = makeAddCustomerStub()
+  const sut = new AddCustomerController(findOneCityStub, addCustomerStub)
   return {
     sut,
-    findOneCityStub
+    findOneCityStub,
+    addCustomerStub
   }
 }
 
@@ -186,6 +209,31 @@ describe('AddCustomerController', () => {
     expect(httpResponse.statusCode).toBe(404)
     expect(httpResponse.body).toEqual({
       error: new InvalidParamError('city').message
+    })
+  })
+
+  test('Should call AddCustomer with correct values', async () => {
+    const { sut, addCustomerStub } = makeSut()
+
+    const addSpy = jest.spyOn(addCustomerStub, 'add')
+
+    const httpRequest: HttpRequest = {
+      body: {
+        name: 'any_name',
+        gender: 'any_gender',
+        age: 'any_age',
+        city: 'any_city',
+        birthdate_at: 'any_date'
+      }
+    }
+
+    await sut.handle(httpRequest)
+    expect(addSpy).toHaveBeenCalledWith({
+      name: 'any_name',
+      gender: 'any_gender',
+      age: 'any_age',
+      city: 'any_city',
+      birthdate_at: 'any_date'
     })
   })
 })
