@@ -65,4 +65,16 @@ describe('DbFindOneCity Usecase', () => {
       state: 'any_state'
     })
   })
+
+  test('Should return null if param is not found', async () => {
+    const { findByCityRepositoryStub, sut } = makeSut()
+
+    jest.spyOn(findByCityRepositoryStub, 'findBy').mockReturnValueOnce(new Promise(resolve => resolve(null)))
+
+    const city = await sut.findBy({
+      id: 'any_id'
+    })
+
+    expect(city).toBe(null)
+  })
 })
