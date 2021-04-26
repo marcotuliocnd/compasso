@@ -8,7 +8,8 @@ import {
   HttpResponse,
   notFound,
   InvalidParamError,
-  AddCustomer
+  AddCustomer,
+  ok
 } from './add-customer-protocols'
 
 export class AddCustomerController implements Controller {
@@ -38,7 +39,7 @@ export class AddCustomerController implements Controller {
         return notFound(new InvalidParamError('city'))
       }
 
-      await this.addCustomer.add({
+      const customer = await this.addCustomer.add({
         name,
         age,
         birthdate_at: birtdateAt,
@@ -46,10 +47,7 @@ export class AddCustomerController implements Controller {
         gender
       })
 
-      return {
-        statusCode: 200,
-        body: null
-      }
+      return ok(customer)
     } catch (error) {
       return serverError()
     }
