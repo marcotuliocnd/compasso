@@ -43,7 +43,7 @@ describe('ListCity Controller', () => {
     const { sut, listCitiesStub } = makeSut()
     const listSpy = jest.spyOn(listCitiesStub, 'list')
     const httpRequest = {
-      params: {
+      queryParams: {
         name: 'any_name',
         state: 'any_state'
       }
