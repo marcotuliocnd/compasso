@@ -1,3 +1,4 @@
+import { ServerError } from './../../../errors/server-errors'
 import { FindOneCity, FindOneCityModel } from './../../../../domain/usecases/city/find-one-city'
 import { CityModel } from './../../../../domain/models/city'
 import { AddCustomerController } from './add-customer'
@@ -136,6 +137,27 @@ describe('AddCustomerController', () => {
     await sut.handle(httpRequest)
     expect(findBySpy).toHaveBeenCalledWith({
       id: 'any_city'
+    })
+  })
+
+  test('Should return 500 if FindOneCity throws', async () => {
+    const { sut, findOneCityStub } = makeSut()
+    jest.spyOn(findOneCityStub, 'findBy').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+
+    const httpRequest: HttpRequest = {
+      body: {
+        name: 'any_name',
+        gender: 'any_gender',
+        age: 'any_age',
+        city: 'any_city',
+        birthdate_at: 'any_date'
+      }
+    }
+
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body).toEqual({
+      error: new ServerError().message
     })
   })
 })
