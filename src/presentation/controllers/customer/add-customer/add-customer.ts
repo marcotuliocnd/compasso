@@ -4,6 +4,16 @@ import { HttpRequest, HttpResponse } from './../../../protocols/http'
 import { Controller } from './../../../protocols/controller'
 export class AddCustomerController implements Controller {
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
-    return await new Promise(resolve => resolve(badRequest(new MissingParamError('name'))))
+    const requiredFields = ['name', 'gender']
+    for (const field of requiredFields) {
+      if (!httpRequest.body[field]) {
+        return badRequest(new MissingParamError(field))
+      }
+    }
+
+    return {
+      statusCode: 200,
+      body: null
+    }
   }
 }
