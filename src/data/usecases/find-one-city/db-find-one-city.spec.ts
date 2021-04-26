@@ -3,20 +3,37 @@ import { FindByCityRepository } from './../../protocols/find-by-city-repository'
 import { CityModel } from './../../../domain/models/city'
 import { FindOneCityModel } from './../../../domain/usecases/city/find-one-city'
 
+const makeFindByCityRepositoryStub = (): FindByCityRepository => {
+  class FindByCityRepositoryStub implements FindByCityRepository {
+    async findBy (params: FindOneCityModel): Promise<CityModel | null> {
+      return await new Promise(resolve => resolve({
+        id: 'any_id',
+        name: 'any_name',
+        state: 'any_state'
+      }))
+    }
+  }
+
+  return new FindByCityRepositoryStub()
+}
+
+interface SutTypes {
+  sut: DbFindOneCity
+  findByCityRepositoryStub: FindByCityRepository
+}
+
+const makeSut = (): SutTypes => {
+  const findByCityRepositoryStub = makeFindByCityRepositoryStub()
+  const sut = new DbFindOneCity(findByCityRepositoryStub)
+  return {
+    findByCityRepositoryStub,
+    sut
+  }
+}
+
 describe('DbFindOneCity Usecase', () => {
   test('Should call FindByCityRepository with correct values', async () => {
-    class FindByCityRepositoryStub implements FindByCityRepository {
-      async findBy (params: FindOneCityModel): Promise<CityModel | null> {
-        return await new Promise(resolve => resolve({
-          id: 'any_id',
-          name: 'any_name',
-          state: 'any_state'
-        }))
-      }
-    }
-
-    const findByCityRepositoryStub = new FindByCityRepositoryStub()
-    const sut = new DbFindOneCity(findByCityRepositoryStub)
+    const { findByCityRepositoryStub, sut } = makeSut()
 
     const findBySpy = jest.spyOn(findByCityRepositoryStub, 'findBy')
 
