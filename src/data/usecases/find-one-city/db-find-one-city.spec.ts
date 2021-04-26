@@ -45,4 +45,24 @@ describe('DbFindOneCity Usecase', () => {
       id: 'any_id'
     })
   })
+
+  test('Should return a city if param is found', async () => {
+    const { findByCityRepositoryStub, sut } = makeSut()
+
+    jest.spyOn(findByCityRepositoryStub, 'findBy').mockReturnValueOnce(new Promise(resolve => resolve({
+      id: 'any_id',
+      name: 'any_name',
+      state: 'any_state'
+    })))
+
+    const city = await sut.findBy({
+      id: 'any_id'
+    })
+
+    expect(city).toEqual({
+      id: 'any_id',
+      name: 'any_name',
+      state: 'any_state'
+    })
+  })
 })
