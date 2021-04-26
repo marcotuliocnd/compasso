@@ -131,5 +131,25 @@ describe('City Mongo Repository', () => {
       expect(city?.name).toBe('any_name')
       expect(city?.state).toBe('any_state')
     })
+
+    test('Should return null if no city matches', async () => {
+      await cityCollection.insertMany([
+        {
+          name: 'any_name',
+          state: 'any_state'
+        },
+        {
+          name: 'other_name',
+          state: 'other_state'
+        }
+      ])
+
+      const sut = makeSut()
+      const city = await sut.findBy({
+        id: 'any_id'
+      })
+
+      expect(city).toBe(null)
+    })
   })
 })
