@@ -22,7 +22,7 @@ export class CityMongoRepository implements AddCityRepository, ListCitiesReposit
     return cities.map(el => MongoHelper.map(el))
   }
 
-  async findBy (params: FindOneCityModel = {}): Promise<CityModel | null> {
+  async findBy (params: FindOneCityModel): Promise<CityModel | null> {
     const cityCollection = MongoHelper.getCollection('cities')
     const mappedParams = MongoHelper.mapParams(params)
     const city: CityModel = await cityCollection.findOne(mappedParams)
