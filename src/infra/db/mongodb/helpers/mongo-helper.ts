@@ -1,4 +1,4 @@
-import { MongoClient, Collection } from 'mongodb'
+import { MongoClient, Collection, ObjectID } from 'mongodb'
 
 export const MongoHelper = {
   client: null as unknown as MongoClient,
@@ -26,6 +26,11 @@ export const MongoHelper = {
 
   mapParams (params: any): any {
     const { id, ...paramsWithoutId } = params
-    return Object.assign({}, paramsWithoutId, { _id: id })
+
+    if (id) {
+      return Object.assign({}, paramsWithoutId, { _id: new ObjectID(id) })
+    }
+
+    return params
   }
 }
