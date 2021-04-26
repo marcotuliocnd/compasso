@@ -7,11 +7,12 @@ import {
   serverError,
   HttpResponse,
   notFound,
-  InvalidParamError
+  InvalidParamError,
+  AddCustomer
 } from './add-customer-protocols'
 
 export class AddCustomerController implements Controller {
-  constructor (private readonly findOneCity: FindOneCity) { }
+  constructor (private readonly findOneCity: FindOneCity, private readonly addCustomer: AddCustomer) { }
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
@@ -22,7 +23,13 @@ export class AddCustomerController implements Controller {
         }
       }
 
-      const { city } = httpRequest.body
+      const {
+        city,
+        age,
+        birthdate_at: birtdateAt,
+        gender,
+        name
+      } = httpRequest.body
 
       const cityExists = await this.findOneCity.findBy({
         id: city
@@ -30,6 +37,14 @@ export class AddCustomerController implements Controller {
       if (!cityExists) {
         return notFound(new InvalidParamError('city'))
       }
+
+      await this.addCustomer.add({
+        name,
+        age,
+        birthdate_at: birtdateAt,
+        city,
+        gender
+      })
 
       return {
         statusCode: 200,
