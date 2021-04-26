@@ -1,5 +1,8 @@
+import { Collection } from 'mongodb'
 import { MongoHelper } from '../helpers/mongo-helper'
 import { CityMongoRepository } from './city'
+
+let cityCollection: Collection
 
 const makeSut = (): CityMongoRepository => {
   return new CityMongoRepository()
@@ -15,7 +18,7 @@ describe('City Mongo Repository', () => {
   })
 
   beforeEach(async () => {
-    const cityCollection = MongoHelper.getCollection('cities')
+    cityCollection = MongoHelper.getCollection('cities')
     await cityCollection.deleteMany({})
   })
 
@@ -36,7 +39,6 @@ describe('City Mongo Repository', () => {
 
   describe('list', () => {
     test('Should return all cities if no params is passed', async () => {
-      const cityCollection = MongoHelper.getCollection('cities')
       await cityCollection.insertMany([
         {
           name: 'any_name',
@@ -57,7 +59,6 @@ describe('City Mongo Repository', () => {
     })
 
     test('Should return only cities with the provided name', async () => {
-      const cityCollection = MongoHelper.getCollection('cities')
       await cityCollection.insertMany([
         {
           name: 'any_name',
@@ -79,7 +80,6 @@ describe('City Mongo Repository', () => {
     })
 
     test('Should return only cities with the provided state', async () => {
-      const cityCollection = MongoHelper.getCollection('cities')
       await cityCollection.insertMany([
         {
           name: 'any_name',
