@@ -83,4 +83,23 @@ describe('DbListCities', () => {
 
     await expect(promise).rejects.toThrow()
   })
+
+  test('Should call ListCitiesRepository only with name if only name is provided', async () => {
+    const { sut, listCitiesRepositoryStub } = makeSut()
+    const listSpy = jest.spyOn(listCitiesRepositoryStub, 'list')
+
+    const params = {
+      name: 'any_name'
+    }
+
+    await sut.list(params)
+
+    expect(listSpy).toBeCalledWith({
+      name: 'any_name'
+    })
+    expect(listSpy).not.toBeCalledWith({
+      name: 'any_name',
+      state: 'any_state'
+    })
+  })
 })
