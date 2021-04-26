@@ -67,4 +67,22 @@ describe('AddCustomerController', () => {
       error: new MissingParamError('age').message
     })
   })
+
+  test('Should return 400 if no birthdate_at is provided', async () => {
+    const { sut } = makeSut()
+    const httpRequest: HttpRequest = {
+      body: {
+        name: 'any_name',
+        gender: 'any_gender',
+        age: 'any_age',
+        city: 'any_city'
+      }
+    }
+
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse.statusCode).toBe(400)
+    expect(httpResponse.body).toEqual({
+      error: new MissingParamError('birthdate_at').message
+    })
+  })
 })
