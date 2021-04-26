@@ -102,4 +102,23 @@ describe('DbListCities', () => {
       state: 'any_state'
     })
   })
+
+  test('Should call ListCitiesRepository only with state if only state is provided', async () => {
+    const { sut, listCitiesRepositoryStub } = makeSut()
+    const listSpy = jest.spyOn(listCitiesRepositoryStub, 'list')
+
+    const params = {
+      state: 'any_state'
+    }
+
+    await sut.list(params)
+
+    expect(listSpy).toBeCalledWith({
+      state: 'any_state'
+    })
+    expect(listSpy).not.toBeCalledWith({
+      name: 'any_name',
+      state: 'any_state'
+    })
+  })
 })
