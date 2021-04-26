@@ -52,4 +52,26 @@ describe('City Mongo Repository', () => {
     expect(cities[0].name).toBe('any_name')
     expect(cities[1].name).toBe('other_name')
   })
+
+  test('Should return only cities with the provided name', async () => {
+    const cityCollection = MongoHelper.getCollection('cities')
+    await cityCollection.insertMany([
+      {
+        name: 'any_name',
+        state: 'any_state'
+      },
+      {
+        name: 'other_name',
+        state: 'other_state'
+      }
+    ])
+
+    const sut = makeSut()
+    const cities = await sut.list({
+      name: 'any_name'
+    })
+
+    expect(cities.length).toBe(1)
+    expect(cities[0].name).toBe('any_name')
+  })
 })
