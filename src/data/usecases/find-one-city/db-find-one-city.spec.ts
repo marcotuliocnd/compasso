@@ -77,4 +77,16 @@ describe('DbFindOneCity Usecase', () => {
 
     expect(city).toBe(null)
   })
+
+  test('Should throw if FindByCityRepository throws', async () => {
+    const { findByCityRepositoryStub, sut } = makeSut()
+
+    jest.spyOn(findByCityRepositoryStub, 'findBy').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+
+    const promise = sut.findBy({
+      id: 'any_id'
+    })
+
+    expect(promise).rejects.toThrow()
+  })
 })
