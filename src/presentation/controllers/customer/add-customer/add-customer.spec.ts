@@ -257,4 +257,29 @@ describe('AddCustomerController', () => {
       error: new ServerError().message
     })
   })
+
+  test('Should return 200 if all params is provided', async () => {
+    const { sut } = makeSut()
+
+    const httpRequest: HttpRequest = {
+      body: {
+        name: 'any_name',
+        gender: 'any_gender',
+        age: 'any_age',
+        city: 'any_city',
+        birthdate_at: 'any_date'
+      }
+    }
+
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse.statusCode).toBe(200)
+    expect(httpResponse.body).toEqual({
+      id: 'any_id',
+      name: 'any_name',
+      gender: 'any_gender',
+      age: 'any_age',
+      city: 'any_city',
+      birthdate_at: 'any_date'
+    })
+  })
 })
