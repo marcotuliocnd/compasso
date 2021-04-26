@@ -5,7 +5,9 @@ import {
   Controller,
   badRequest,
   serverError,
-  HttpResponse
+  HttpResponse,
+  notFound,
+  InvalidParamError
 } from './add-customer-protocols'
 
 export class AddCustomerController implements Controller {
@@ -21,9 +23,13 @@ export class AddCustomerController implements Controller {
       }
 
       const { city } = httpRequest.body
-      await this.findOneCity.findBy({
+
+      const cityExists = await this.findOneCity.findBy({
         id: city
       })
+      if (!cityExists) {
+        return notFound(new InvalidParamError('city'))
+      }
 
       return {
         statusCode: 200,
