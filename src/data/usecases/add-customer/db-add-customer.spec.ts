@@ -57,4 +57,22 @@ describe('DbAddCustomer Usecase', () => {
       name: 'any_name'
     })
   })
+
+  test('Shoud throw if AddCustomerRepository throws', async () => {
+    const { sut, addCustomerRepositoryStub } = makeSut()
+
+    jest.spyOn(addCustomerRepositoryStub, 'add').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+
+    const customerData: AddCustomerModel = {
+      age: 'any_age',
+      birthdate_at: 'any_date',
+      city: 'any_city_id',
+      gender: 'any_gender',
+      name: 'any_name'
+    }
+
+    const promise = sut.add(customerData)
+
+    expect(promise).rejects.toThrow()
+  })
 })
