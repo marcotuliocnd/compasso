@@ -24,9 +24,8 @@ export class CityMongoRepository implements AddCityRepository, ListCitiesReposit
 
   async findBy (params: FindOneCityModel = {}): Promise<CityModel | null> {
     const cityCollection = MongoHelper.getCollection('cities')
-    const { id, ...paramsWithoutId } = params
-    const paramsWithId = Object.assign({}, paramsWithoutId, { _id: id })
-    const city: CityModel = await cityCollection.findOne(paramsWithId)
+    const mappedParams = MongoHelper.mapParams(params)
+    const city: CityModel = await cityCollection.findOne(mappedParams)
     return city ? MongoHelper.map(city) : null
   }
 }

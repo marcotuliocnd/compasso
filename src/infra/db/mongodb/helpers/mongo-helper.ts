@@ -22,5 +22,10 @@ export const MongoHelper = {
     const { _id, ...collectionWithoutId } = collection
 
     return Object.assign({}, collectionWithoutId, { id: _id })
+  },
+
+  mapParams (params: any): any {
+    const { id, ...paramsWithoutId } = params
+    return Object.assign({}, paramsWithoutId, { _id: id })
   }
 }
