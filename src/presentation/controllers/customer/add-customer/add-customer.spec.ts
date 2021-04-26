@@ -2,9 +2,20 @@ import { AddCustomerController } from './add-customer'
 import { HttpRequest } from './../../../protocols/http'
 import { MissingParamError } from './../../../errors/missing-param-errors'
 
+interface SutTypes {
+  sut: AddCustomerController
+}
+
+const makeSut = (): SutTypes => {
+  const sut = new AddCustomerController()
+  return {
+    sut
+  }
+}
+
 describe('AddCustomerController', () => {
   test('Should return 400 if no name is provided', async () => {
-    const sut = new AddCustomerController()
+    const { sut } = makeSut()
     const httpRequest: HttpRequest = {
       body: {
         gender: 'any_gender',
