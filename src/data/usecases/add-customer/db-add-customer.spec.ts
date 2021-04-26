@@ -75,4 +75,27 @@ describe('DbAddCustomer Usecase', () => {
 
     expect(promise).rejects.toThrow()
   })
+
+  test('Shoud return a customer on success', async () => {
+    const { sut } = makeSut()
+
+    const customerData: AddCustomerModel = {
+      age: 'any_age',
+      birthdate_at: 'any_date',
+      city: 'any_city_id',
+      gender: 'any_gender',
+      name: 'any_name'
+    }
+
+    const customer = await sut.add(customerData)
+
+    expect(customer).toEqual({
+      id: 'any_id',
+      age: 'any_age',
+      birthdate_at: 'any_date',
+      city: 'any_city_id',
+      gender: 'any_gender',
+      name: 'any_name'
+    })
+  })
 })
