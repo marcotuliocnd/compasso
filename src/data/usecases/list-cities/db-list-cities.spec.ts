@@ -1,3 +1,4 @@
+import { ListCitiesModel } from '../../../domain/usecases/city/list-cities'
 import { DbListCities } from './db-list-cities'
 import { ListCitiesRepository } from '../../protocols/list-cities-repository'
 import { CityModel } from '../../../domain/models/city'
@@ -16,7 +17,7 @@ const makeFakeCities = (): CityModel[] => {
 
 const makeListCitiesRepositoryStub = (): ListCitiesRepository => {
   class ListCitiesRepositoryStub implements ListCitiesRepository {
-    async list (params?: any): Promise<CityModel[]> {
+    async list (params?: ListCitiesModel): Promise<CityModel[]> {
       return await new Promise(resolve => resolve(makeFakeCities()))
     }
   }

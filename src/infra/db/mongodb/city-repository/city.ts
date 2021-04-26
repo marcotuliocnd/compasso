@@ -1,3 +1,4 @@
+import { ListCitiesModel } from '../../../../domain/usecases/city/list-cities'
 import { CityModel } from '../../../../domain/models/city'
 import { AddCityModel } from '../../../../domain/usecases/city/add-city'
 import { AddCityRepository } from '../../../../data/protocols/add-city-repository'
@@ -12,7 +13,7 @@ export class CityMongoRepository implements AddCityRepository, ListCitiesReposit
     return MongoHelper.map(result.ops[0])
   }
 
-  async list (params = {}): Promise<CityModel[]> {
+  async list (params: ListCitiesModel = {}): Promise<CityModel[]> {
     const cityCollection = MongoHelper.getCollection('cities')
 
     const cities: CityModel[] = await cityCollection.find(params).toArray()

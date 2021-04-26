@@ -1,3 +1,4 @@
+import { ListCitiesModel } from '../../../../domain/usecases/city/list-cities'
 import { ListCitiesController } from './list-cities'
 import { CityModel, ListCities, ok, serverError } from './list-cities-protocols'
 
@@ -15,7 +16,7 @@ const makeFakeCities = (): CityModel[] => {
 
 const makeListCitiesStub = (): ListCities => {
   class ListCitiesStub implements ListCities {
-    async list (params: any = {}): Promise<CityModel[]> {
+    async list (params: ListCitiesModel = {}): Promise<CityModel[]> {
       return await new Promise(resolve => resolve(makeFakeCities()))
     }
   }
