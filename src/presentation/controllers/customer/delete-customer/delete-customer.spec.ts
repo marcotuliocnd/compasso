@@ -87,4 +87,21 @@ describe('DeleteCustomerController', () => {
       success: true
     })
   })
+
+  test('Should return 422 if delete fails', async () => {
+    const { sut, deleteCustomerByIdStub } = makeSut()
+    jest.spyOn(deleteCustomerByIdStub, 'deleteById').mockReturnValueOnce(new Promise((resolve) => resolve(false)))
+
+    const httpRequest: HttpRequest = {
+      params: {
+        customerId: 'any_id'
+      }
+    }
+
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse.statusCode).toBe(422)
+    expect(httpResponse.body).toEqual({
+      success: false
+    })
+  })
 })
