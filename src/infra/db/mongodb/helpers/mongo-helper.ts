@@ -32,5 +32,9 @@ export const MongoHelper = {
     }
 
     return params
+  },
+
+  parseObjectId (id: string): ObjectID {
+    return new ObjectID(id)
   }
 }
