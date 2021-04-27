@@ -1,4 +1,4 @@
-import { HttpRequest, MissingParamError, ShowCustomerController, CustomerModel, FindCustomerById } from './show-customer-protocols'
+import { HttpRequest, MissingParamError, ShowCustomerController, CustomerModel, FindCustomerById, ServerError } from './show-customer-protocols'
 
 const makeFindCustomerByIdStub = (): FindCustomerById => {
   class FindCustomerByIdStub implements FindCustomerById {
@@ -61,5 +61,22 @@ describe('ShowCustomerController', () => {
 
     await sut.handle(httpRequest)
     expect(findByIdSpy).toHaveBeenCalledWith('any_id')
+  })
+
+  test('Should return 500 if FindCustomerById throws', async () => {
+    const { sut, findCustomerByIdStub } = makeSut()
+    jest.spyOn(findCustomerByIdStub, 'findById').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+
+    const httpRequest: HttpRequest = {
+      params: {
+        customerId: 'any_id'
+      }
+    }
+
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body).toEqual({
+      error: new ServerError().message
+    })
   })
 })
