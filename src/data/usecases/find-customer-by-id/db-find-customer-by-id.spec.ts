@@ -65,4 +65,14 @@ describe('DbFindCustomerById Usecase', () => {
 
     expect(customer).toEqual(makeFakeCustomer())
   })
+
+  test('Shoud return null if FindCustomerByIdRepository does not find a customer', async () => {
+    const { sut, findCustomerByIdRepositoryStub } = makeSut()
+    jest.spyOn(findCustomerByIdRepositoryStub, 'findById').mockReturnValueOnce(new Promise((resolve) => resolve(null)))
+
+    const costumerId = 'any_id'
+    const customer = await sut.findById(costumerId)
+
+    expect(customer).toEqual(null)
+  })
 })
