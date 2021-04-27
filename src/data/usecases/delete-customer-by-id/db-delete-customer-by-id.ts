@@ -5,7 +5,7 @@ export class DbDeleteCustomerById implements DeleteCustomerById {
   constructor (private readonly deleteCustomerByIdRepository: DeleteCustomerByIdRepository) {}
 
   async deleteById (id: string): Promise<boolean> {
-    await this.deleteCustomerByIdRepository.deleteById(id)
-    return true
+    const sucessfullyDeleted = await this.deleteCustomerByIdRepository.deleteById(id)
+    return sucessfullyDeleted
   }
 }

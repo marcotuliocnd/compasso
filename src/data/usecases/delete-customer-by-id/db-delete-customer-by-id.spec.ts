@@ -55,4 +55,14 @@ describe('DbDeleteCustomerById Usecase', () => {
 
     expect(successfullyDeleted).toBe(true)
   })
+
+  test('Shoud return false if delete fails', async () => {
+    const { sut, deleteCustomerByIdRepositoryStub } = makeSut()
+    jest.spyOn(deleteCustomerByIdRepositoryStub, 'deleteById').mockReturnValueOnce(new Promise((resolve) => resolve(false)))
+
+    const customerId = 'any_id'
+    const successfullyDeleted = await sut.deleteById(customerId)
+
+    expect(successfullyDeleted).toBe(false)
+  })
 })
