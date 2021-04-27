@@ -1,6 +1,7 @@
+export { ServerError } from './../../../errors/server-errors'
 export { FindCustomerById } from './../../../../domain/usecases/customer/find-customer-by-id'
 export { CustomerModel } from './../../../../domain/models/customer'
-export { badRequest } from './../../../helpers/http-helper'
+export { badRequest, serverError } from './../../../helpers/http-helper'
 export { Controller } from './../../../protocols/controller'
 export { HttpRequest, HttpResponse } from './../../../protocols/http'
 export { MissingParamError } from './../../../errors/missing-param-errors'
