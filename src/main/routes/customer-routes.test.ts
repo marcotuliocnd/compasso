@@ -16,25 +16,27 @@ describe('City Routes', () => {
     await customerCollection.deleteMany({})
   })
 
-  test('Should return a customer on success', async () => {
-    const cityCollection = MongoHelper.getCollection('cities')
+  describe('AddCustomer', () => {
+    test('Should return a customer on success', async () => {
+      const cityCollection = MongoHelper.getCollection('cities')
 
-    const { ops } = await cityCollection.insertOne({
-      name: 'Uberlandia',
-      state: 'MG'
-    })
-
-    const city = MongoHelper.map(ops[0])
-
-    await request(app)
-      .post('/v1/customers')
-      .send({
-        name: 'Marco Tulio',
-        age: '20',
-        birthdate_at: '2000-09-11',
-        city: String(city.id),
-        gender: 'masculino'
+      const { ops } = await cityCollection.insertOne({
+        name: 'Uberlandia',
+        state: 'MG'
       })
-      .expect(200)
+
+      const city = MongoHelper.map(ops[0])
+
+      await request(app)
+        .post('/v1/customers')
+        .send({
+          name: 'Marco Tulio',
+          age: '20',
+          birthdate_at: '2000-09-11',
+          city: String(city.id),
+          gender: 'masculino'
+        })
+        .expect(200)
+    })
   })
 })
