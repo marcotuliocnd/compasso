@@ -46,4 +46,13 @@ describe('DbDeleteCustomerById Usecase', () => {
 
     expect(promise).rejects.toThrow()
   })
+
+  test('Shoud return true if successfully deleted', async () => {
+    const { sut } = makeSut()
+
+    const customerId = 'any_id'
+    const successfullyDeleted = await sut.deleteById(customerId)
+
+    expect(successfullyDeleted).toBe(true)
+  })
 })
