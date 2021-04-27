@@ -36,4 +36,14 @@ describe('DbDeleteCustomerById Usecase', () => {
 
     expect(deleteByIdSpy).toHaveBeenCalledWith('any_id')
   })
+
+  test('Shoud throw if DeleteCustomerByIdRepository throws', async () => {
+    const { sut, deleteCustomerByIdRepositoryStub } = makeSut()
+    jest.spyOn(deleteCustomerByIdRepositoryStub, 'deleteById').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+
+    const customerId = 'any_id'
+    const promise = sut.deleteById(customerId)
+
+    expect(promise).rejects.toThrow()
+  })
 })
