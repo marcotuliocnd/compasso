@@ -108,4 +108,62 @@ describe('CustomerMongoRepository', () => {
       expect(customer).not.toBeTruthy()
     })
   })
+
+  describe('deleteById', () => {
+    test('Should return true on success', async () => {
+      const result = await customerCollection.insertMany([
+        {
+          age: 'any_age',
+          birthdate_at: 'any_date',
+          city: 'any_city_id',
+          gender: 'any_gender',
+          name: 'any_name'
+        },
+        {
+          age: 'other_age',
+          birthdate_at: 'other_date',
+          city: 'other_city_id',
+          gender: 'other_gender',
+          name: 'other_name'
+        }
+      ])
+
+      const { sut } = makeSut()
+      const customerId = result.ops[0]._id
+      const deleted = await sut.deleteById(customerId)
+
+      const total = await customerCollection.find().count()
+
+      expect(deleted).toBeTruthy()
+      expect(total).toBe(1)
+    })
+
+    test('Should return false on fail', async () => {
+      await customerCollection.insertMany([
+        {
+          age: 'any_age',
+          birthdate_at: 'any_date',
+          city: 'any_city_id',
+          gender: 'any_gender',
+          name: 'any_name'
+        },
+        {
+          age: 'other_age',
+          birthdate_at: 'other_date',
+          city: 'other_city_id',
+          gender: 'other_gender',
+          name: 'other_name'
+        }
+      ])
+
+      const { sut } = makeSut()
+      const customerId = '111111111111'
+      const customer = await sut.deleteById(customerId)
+
+      const total = await customerCollection.find().count()
+
+      expect(customer).not.toBeTruthy()
+      expect(total).toBe(2)
+    })
+  })
 })
