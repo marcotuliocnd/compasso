@@ -50,4 +50,37 @@ describe('CustomerMongoRepository', () => {
       expect(customer.gender).toBe('any_gender')
     })
   })
+
+  describe('findById', () => {
+    test('Should return a customer on success', async () => {
+      const result = await customerCollection.insertMany([
+        {
+          age: 'any_age',
+          birthdate_at: 'any_date',
+          city: 'any_city_id',
+          gender: 'any_gender',
+          name: 'any_name'
+        },
+        {
+          age: 'other_age',
+          birthdate_at: 'other_date',
+          city: 'other_city_id',
+          gender: 'other_gender',
+          name: 'other_name'
+        }
+      ])
+
+      const { sut } = makeSut()
+      const customerId = result.ops[0]._id
+      const customer = await sut.findById(customerId)
+
+      expect(customer).toBeTruthy()
+      expect(customer?.id).toEqual(customerId)
+      expect(customer?.name).toBe('any_name')
+      expect(customer?.age).toBe('any_age')
+      expect(customer?.birthdate_at).toBe('any_date')
+      expect(customer?.city).toBe('any_city_id')
+      expect(customer?.gender).toBe('any_gender')
+    })
+  })
 })
