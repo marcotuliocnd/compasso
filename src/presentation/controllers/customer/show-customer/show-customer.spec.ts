@@ -1,4 +1,4 @@
-import { HttpRequest, MissingParamError, ShowCustomerController, CustomerModel, FindCustomerById, ServerError } from './show-customer-protocols'
+import { HttpRequest, MissingParamError, ShowCustomerController, CustomerModel, FindCustomerById, ServerError, InvalidParamError } from './show-customer-protocols'
 
 const makeFindCustomerByIdStub = (): FindCustomerById => {
   class FindCustomerByIdStub implements FindCustomerById {
@@ -97,6 +97,23 @@ describe('ShowCustomerController', () => {
       birthdate_at: 'any_date',
       city: 'any_city',
       gender: 'any_gender'
+    })
+  })
+
+  test('Should return 404 if FindCustomerById does not find a customer', async () => {
+    const { sut, findCustomerByIdStub } = makeSut()
+    jest.spyOn(findCustomerByIdStub, 'findById').mockReturnValueOnce(new Promise((resolve) => resolve(null)))
+
+    const httpRequest: HttpRequest = {
+      params: {
+        customerId: 'any_id'
+      }
+    }
+
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse.statusCode).toBe(404)
+    expect(httpResponse.body).toEqual({
+      error: new InvalidParamError('customerId').message
     })
   })
 })
