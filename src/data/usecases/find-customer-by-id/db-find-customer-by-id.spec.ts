@@ -56,4 +56,13 @@ describe('DbFindCustomerById Usecase', () => {
 
     expect(promise).rejects.toThrow()
   })
+
+  test('Shoud return a customer if FindCustomerByIdRepository finds a customer', async () => {
+    const { sut } = makeSut()
+
+    const costumerId = 'any_id'
+    const customer = await sut.findById(costumerId)
+
+    expect(customer).toEqual(makeFakeCustomer())
+  })
 })
