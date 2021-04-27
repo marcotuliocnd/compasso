@@ -46,4 +46,14 @@ describe('DbFindCustomerById Usecase', () => {
 
     expect(findByIdSpy).toHaveBeenCalledWith('any_id')
   })
+
+  test('Shoud throw if FindCustomerByIdRepository throws', async () => {
+    const { sut, findCustomerByIdRepositoryStub } = makeSut()
+    jest.spyOn(findCustomerByIdRepositoryStub, 'findById').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+
+    const costumerId = 'any_id'
+    const promise = sut.findById(costumerId)
+
+    expect(promise).rejects.toThrow()
+  })
 })
