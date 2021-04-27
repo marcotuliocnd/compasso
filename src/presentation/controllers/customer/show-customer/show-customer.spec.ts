@@ -38,7 +38,6 @@ describe('ShowCustomerController', () => {
 
     const httpRequest: HttpRequest = {
       params: {
-        customerId: 'any_id'
       }
     }
 
@@ -77,6 +76,27 @@ describe('ShowCustomerController', () => {
     expect(httpResponse.statusCode).toBe(500)
     expect(httpResponse.body).toEqual({
       error: new ServerError().message
+    })
+  })
+
+  test('Should return 200 if FindCustomerById finds a customer', async () => {
+    const { sut } = makeSut()
+
+    const httpRequest: HttpRequest = {
+      params: {
+        customerId: 'any_id'
+      }
+    }
+
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse.statusCode).toBe(200)
+    expect(httpResponse.body).toEqual({
+      id: 'any_id',
+      name: 'any_name',
+      age: 'any_age',
+      birthdate_at: 'any_date',
+      city: 'any_city',
+      gender: 'any_gender'
     })
   })
 })
