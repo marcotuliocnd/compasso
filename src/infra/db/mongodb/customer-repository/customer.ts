@@ -21,4 +21,14 @@ export class CustomerMongoRepository implements AddCustomerRepository, FindCusto
 
     return customer ? MongoHelper.map(customer) : null
   }
+
+  async deleteById (id: string): Promise<boolean> {
+    const customerCollection = MongoHelper.getCollection('customers')
+    const objectId = MongoHelper.parseObjectId(id)
+    const { result } = await customerCollection.deleteOne({
+      _id: objectId
+    })
+
+    return !!result.n
+  }
 }
