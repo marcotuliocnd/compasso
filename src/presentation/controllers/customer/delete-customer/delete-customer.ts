@@ -1,4 +1,4 @@
-import { Controller, HttpRequest, HttpResponse, badRequest, MissingParamError, DeleteCustomerById, serverError, ok } from './delete-customer-protocols'
+import { Controller, HttpRequest, HttpResponse, badRequest, MissingParamError, DeleteCustomerById, serverError, ok, unprocessableEntity } from './delete-customer-protocols'
 
 export class DeleteCustomerController implements Controller {
   constructor (private readonly deleteCustomerById: DeleteCustomerById) {}
@@ -9,9 +9,12 @@ export class DeleteCustomerController implements Controller {
         return badRequest(new MissingParamError('customerId'))
       }
 
-      await this.deleteCustomerById.deleteById(httpRequest.params.customerId)
+      const successfullyDeleted = await this.deleteCustomerById.deleteById(httpRequest.params.customerId)
+      if (!successfullyDeleted) {
+        return unprocessableEntity({ success: false })
+      }
 
-      return ok({ success: true })
+      return ok({ success: successfullyDeleted })
     } catch (error) {
       return serverError()
     }

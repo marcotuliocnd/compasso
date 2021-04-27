@@ -26,3 +26,8 @@ export const ok = (body: any): HttpResponse => ({
   statusCode: 200,
   body
 })
+
+export const unprocessableEntity = (body: any): HttpResponse => ({
+  statusCode: 422,
+  body
+})
