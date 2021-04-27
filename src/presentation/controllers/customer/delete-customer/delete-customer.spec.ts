@@ -1,14 +1,27 @@
-import { HttpRequest, MissingParamError, DeleteCustomerController } from './delete-customer-protocols'
+import { HttpRequest, MissingParamError, DeleteCustomerController, DeleteCustomerById } from './delete-customer-protocols'
+
+const makeDeleteCustomerByIdStub = (): DeleteCustomerById => {
+  class DeleteCustomerByIdStub implements DeleteCustomerById {
+    async deleteById (id: string): Promise<boolean> {
+      return true
+    }
+  }
+
+  return new DeleteCustomerByIdStub()
+}
 
 interface SutTypes {
   sut: DeleteCustomerController
+  deleteCustomerByIdStub: DeleteCustomerById
 }
 
 const makeSut = (): SutTypes => {
-  const sut = new DeleteCustomerController()
+  const deleteCustomerByIdStub = makeDeleteCustomerByIdStub()
+  const sut = new DeleteCustomerController(deleteCustomerByIdStub)
 
   return {
-    sut
+    sut,
+    deleteCustomerByIdStub
   }
 }
 
@@ -26,5 +39,19 @@ describe('DeleteCustomerController', () => {
     expect(httpResponse.body).toEqual({
       error: new MissingParamError('customerId').message
     })
+  })
+
+  test('Should call DeleteCustomerById with the provided customerId', async () => {
+    const { sut, deleteCustomerByIdStub } = makeSut()
+    const deleteByIdSpy = jest.spyOn(deleteCustomerByIdStub, 'deleteById')
+
+    const httpRequest: HttpRequest = {
+      params: {
+        customerId: 'any_id'
+      }
+    }
+
+    await sut.handle(httpRequest)
+    expect(deleteByIdSpy).toHaveBeenCalledWith('any_id')
   })
 })
