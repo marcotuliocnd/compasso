@@ -1,4 +1,4 @@
-import { HttpRequest, MissingParamError, DeleteCustomerController, DeleteCustomerById } from './delete-customer-protocols'
+import { HttpRequest, MissingParamError, DeleteCustomerController, DeleteCustomerById, ServerError } from './delete-customer-protocols'
 
 const makeDeleteCustomerByIdStub = (): DeleteCustomerById => {
   class DeleteCustomerByIdStub implements DeleteCustomerById {
@@ -53,5 +53,22 @@ describe('DeleteCustomerController', () => {
 
     await sut.handle(httpRequest)
     expect(deleteByIdSpy).toHaveBeenCalledWith('any_id')
+  })
+
+  test('Should return 500 if DeleteCustomerById throws', async () => {
+    const { sut, deleteCustomerByIdStub } = makeSut()
+    jest.spyOn(deleteCustomerByIdStub, 'deleteById').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+
+    const httpRequest: HttpRequest = {
+      params: {
+        customerId: 'any_id'
+      }
+    }
+
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body).toEqual({
+      error: new ServerError().message
+    })
   })
 })
