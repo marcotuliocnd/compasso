@@ -71,4 +71,20 @@ describe('DeleteCustomerController', () => {
       error: new ServerError().message
     })
   })
+
+  test('Should return 200 if success', async () => {
+    const { sut } = makeSut()
+
+    const httpRequest: HttpRequest = {
+      params: {
+        customerId: 'any_id'
+      }
+    }
+
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse.statusCode).toBe(200)
+    expect(httpResponse.body).toEqual({
+      success: true
+    })
+  })
 })
