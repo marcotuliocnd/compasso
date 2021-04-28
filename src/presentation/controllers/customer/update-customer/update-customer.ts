@@ -18,7 +18,9 @@ export class UpdateCustomerController implements Controller {
       }
     }
 
-    await this.updateCustomerById.update(httpRequest.params.customerId, httpRequest.body)
+    const { id, ...updateParams } = httpRequest.body
+
+    await this.updateCustomerById.update(httpRequest.params.customerId, updateParams)
 
     return badRequest(new MissingParamError('customerId'))
   }
