@@ -58,4 +58,13 @@ describe('DbListCustomer Usecase', () => {
       name: 'any_name'
     })
   })
+
+  test('Should get default params value if no params is passed', async () => {
+    const { sut, listCustomerRepositoryStub } = makeSut()
+    const listSpy = jest.spyOn(listCustomerRepositoryStub, 'list')
+
+    await sut.list()
+
+    expect(listSpy).toBeCalledWith({})
+  })
 })
