@@ -1,5 +1,5 @@
 import { InvalidParamError } from './../../../errors/invalid-param-errors'
-import { notFound } from './../../../helpers/http-helper'
+import { notFound, serverError } from './../../../helpers/http-helper'
 import { CityModel } from './../../../../domain/models/city'
 import { FindOneCity, FindOneCityModel } from './../../../../domain/usecases/city/find-one-city'
 import { UpdateCustomerByIdModel, UpdateCustomerById } from './../../../../domain/usecases/customer/update-customer-by-id'
@@ -170,5 +170,23 @@ describe('UpdateCustomerController', () => {
     await sut.handle(httpRequest)
 
     expect(updateSpy).toHaveBeenCalledWith('any_id', { name: 'any_name' })
+  })
+
+  test('Should return 500 if FindOneCity throws', async () => {
+    const { sut, findOneCityStub } = makeSut()
+    jest.spyOn(findOneCityStub, 'findBy').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+
+    const httpRequest: HttpRequest = {
+      body: {
+        city: 'any_city'
+      },
+      params: {
+        customerId: 'any_id'
+      }
+    }
+
+    const httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse).toEqual(serverError())
   })
 })
