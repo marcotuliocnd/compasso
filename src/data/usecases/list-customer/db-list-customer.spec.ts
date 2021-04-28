@@ -67,4 +67,15 @@ describe('DbListCustomer Usecase', () => {
 
     expect(listSpy).toBeCalledWith({})
   })
+
+  test('Should throw if ListCustomerRepository throws', async () => {
+    const { sut, listCustomerRepositoryStub } = makeSut()
+    jest.spyOn(listCustomerRepositoryStub, 'list').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+
+    const promise = sut.list({
+      name: 'any_name'
+    })
+
+    expect(promise).rejects.toThrow()
+  })
 })
