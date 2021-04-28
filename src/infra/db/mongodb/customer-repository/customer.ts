@@ -46,6 +46,7 @@ export class CustomerMongoRepository implements AddCustomerRepository, FindCusto
   async update (id: string, params: UpdateCustomerByIdModel): Promise<CustomerModel> {
     const customerCollection = MongoHelper.getCollection('customers')
     const objectId = MongoHelper.parseObjectId(id)
+
     await customerCollection.updateOne({ _id: objectId }, {
       $set: params
     })
