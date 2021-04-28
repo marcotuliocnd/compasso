@@ -1,10 +1,12 @@
+import { ListCustomerRepository } from './../../../../data/protocols/list-customer-repository'
+import { ListCustomerModel } from './../../../../domain/usecases/customer/list-customer'
 import { FindCustomerByIdRepository } from './../../../../data/protocols/find-customer-by-id-repository'
 import { MongoHelper } from './../helpers/mongo-helper'
 import { CustomerModel } from './../../../../domain/models/customer'
 import { AddCustomerModel } from './../../../../domain/usecases/customer/add-customer'
 import { AddCustomerRepository } from './../../../../data/protocols/add-customer-repository'
 
-export class CustomerMongoRepository implements AddCustomerRepository, FindCustomerByIdRepository {
+export class CustomerMongoRepository implements AddCustomerRepository, FindCustomerByIdRepository, ListCustomerRepository {
   async add (customerData: AddCustomerModel): Promise<CustomerModel> {
     const customerCollection = MongoHelper.getCollection('customers')
 
@@ -30,5 +32,12 @@ export class CustomerMongoRepository implements AddCustomerRepository, FindCusto
     })
 
     return !!result.n
+  }
+
+  async list (params: ListCustomerModel = {}): Promise<CustomerModel[]> {
+    const customerCollection = MongoHelper.getCollection('customers')
+    const customers: CustomerModel[] = await customerCollection.find(params).toArray()
+
+    return customers.map(el => MongoHelper.map(el))
   }
 }
