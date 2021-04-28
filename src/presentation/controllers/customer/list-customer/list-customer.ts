@@ -8,8 +8,8 @@ export class ListCustomerController implements Controller {
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
-      await this.listCustomer.list(httpRequest.body)
-      return ok(null)
+      const customers = await this.listCustomer.list(httpRequest.body)
+      return ok(customers)
     } catch (error) {
       return serverError()
     }
