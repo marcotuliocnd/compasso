@@ -1,10 +1,16 @@
-import { InvalidParamError } from './../../../errors/invalid-param-errors'
-import { FindOneCity } from './../../../../domain/usecases/city/find-one-city'
-import { MissingParamError } from './../../../errors/missing-param-errors'
-import { badRequest, notFound, serverError, ok } from './../../../helpers/http-helper'
-import { HttpRequest, HttpResponse } from './../../../protocols/http'
-import { Controller } from './../../../protocols/controller'
-import { UpdateCustomerById } from './../../../../domain/usecases/customer/update-customer-by-id'
+import {
+  InvalidParamError,
+  FindOneCity,
+  MissingParamError,
+  badRequest,
+  notFound,
+  serverError,
+  ok,
+  HttpRequest,
+  HttpResponse,
+  Controller,
+  UpdateCustomerById
+} from './update-customer-protocols'
 
 export class UpdateCustomerController implements Controller {
   constructor (private readonly updateCustomerById: UpdateCustomerById, private readonly findOneCity: FindOneCity) {}

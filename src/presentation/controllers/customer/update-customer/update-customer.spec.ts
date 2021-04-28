@@ -1,12 +1,18 @@
-import { InvalidParamError } from './../../../errors/invalid-param-errors'
-import { notFound, serverError, ok } from './../../../helpers/http-helper'
-import { CityModel } from './../../../../domain/models/city'
-import { FindOneCity, FindOneCityModel } from './../../../../domain/usecases/city/find-one-city'
-import { UpdateCustomerByIdModel, UpdateCustomerById } from './../../../../domain/usecases/customer/update-customer-by-id'
-import { CustomerModel } from './../../../../domain/models/customer'
-import { MissingParamError } from './../../../errors/missing-param-errors'
-import { UpdateCustomerController } from './update-customer'
-import { HttpRequest } from './../../../protocols/http'
+import {
+  InvalidParamError,
+  notFound,
+  serverError,
+  ok,
+  CityModel,
+  FindOneCity,
+  FindOneCityModel,
+  UpdateCustomerByIdModel,
+  UpdateCustomerById,
+  CustomerModel,
+  MissingParamError,
+  UpdateCustomerController,
+  HttpRequest
+} from './update-customer-protocols'
 
 const makeFakeCustomer = (): CustomerModel => ({
   id: 'any_id',
@@ -25,7 +31,8 @@ const makeFakeCities = (): CityModel => ({
 
 const makeUpdateCustomerById = (): UpdateCustomerById => {
   class UpdateCustomerByIdStub implements UpdateCustomerById {
-    async update (id: string, values: UpdateCustomerByIdModel): Promise<CustomerModel> {
+    async update (id: string,
+      values: UpdateCustomerByIdModel): Promise<CustomerModel> {
       const updatedCustomer = {
         ...makeFakeCustomer(),
         ...values
