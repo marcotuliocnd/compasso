@@ -1,3 +1,5 @@
+import { CityModel } from './../../../../domain/models/city'
+import { FindOneCity, FindOneCityModel } from './../../../../domain/usecases/city/find-one-city'
 import { UpdateCustomerByIdModel, UpdateCustomerById } from './../../../../domain/usecases/customer/update-customer-by-id'
 import { CustomerModel } from './../../../../domain/models/customer'
 import { MissingParamError } from './../../../errors/missing-param-errors'
@@ -13,6 +15,12 @@ const makeFakeCustomer = (): CustomerModel => ({
   gender: 'any_gender'
 })
 
+const makeFakeCities = (): CityModel => ({
+  id: 'any_id',
+  name: 'any_name',
+  state: 'any_state'
+})
+
 const makeUpdateCustomerById = (): UpdateCustomerById => {
   class UpdateCustomerByIdStub implements UpdateCustomerById {
     async update (id: string, values: UpdateCustomerByIdModel): Promise<CustomerModel> {
@@ -23,17 +31,30 @@ const makeUpdateCustomerById = (): UpdateCustomerById => {
   return new UpdateCustomerByIdStub()
 }
 
+const makeFindOneCity = (): FindOneCity => {
+  class FindOneCityStub implements FindOneCity {
+    async findBy (params: FindOneCityModel = {}): Promise<CityModel | null> {
+      return makeFakeCities()
+    }
+  }
+
+  return new FindOneCityStub()
+}
+
 interface SutTypes {
   sut: UpdateCustomerController
   updateCustomerByIdStub: UpdateCustomerById
+  findOneCityStub: FindOneCity
 }
 
 const makeSut = (): SutTypes => {
   const updateCustomerByIdStub = makeUpdateCustomerById()
-  const sut = new UpdateCustomerController(updateCustomerByIdStub)
+  const findOneCityStub = makeFindOneCity()
+  const sut = new UpdateCustomerController(updateCustomerByIdStub, findOneCityStub)
   return {
     sut,
-    updateCustomerByIdStub
+    updateCustomerByIdStub,
+    findOneCityStub
   }
 }
 
@@ -74,5 +95,23 @@ describe('UpdateCustomerController', () => {
     await sut.handle(httpRequest)
 
     expect(updateSpy).toHaveBeenCalledWith('any_id', { name: 'any_name' })
+  })
+
+  test('Should call FindOneCity if city is provided', async () => {
+    const { sut, findOneCityStub } = makeSut()
+    const findBySpy = jest.spyOn(findOneCityStub, 'findBy')
+
+    const httpRequest: HttpRequest = {
+      body: {
+        city: 'any_city'
+      },
+      params: {
+        customerId: 'any_id'
+      }
+    }
+
+    await sut.handle(httpRequest)
+
+    expect(findBySpy).toHaveBeenCalledWith('any_city')
   })
 })
