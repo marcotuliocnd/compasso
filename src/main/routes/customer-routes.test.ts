@@ -3,7 +3,7 @@ import request from 'supertest'
 import app from '../config/app'
 import { MongoHelper } from '../../infra/db/mongodb/helpers/mongo-helper'
 
-describe('City Routes', () => {
+describe('Customer Routes', () => {
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGO_URL ?? '')
   })
@@ -98,6 +98,35 @@ describe('City Routes', () => {
       const total = await customerCollection.find().count()
 
       expect(total).toBe(0)
+    })
+  })
+
+  describe('ListCustomer', () => {
+    test('Should return a list of customers on success', async () => {
+      const cityCollection = MongoHelper.getCollection('cities')
+      const customerCollection = MongoHelper.getCollection('customers')
+
+      const { ops } = await cityCollection.insertOne({
+        name: 'Uberlandia',
+        state: 'MG'
+      })
+
+      const city = MongoHelper.map(ops[0])
+
+      await customerCollection.insertOne({
+        name: 'Marco Tulio',
+        age: '20',
+        birthdate_at: '2000-09-11',
+        city: String(city.id),
+        gender: 'masculino'
+      })
+
+      await request(app)
+        .get('/v1/customers')
+        .send({
+          name: 'Marco Tulio'
+        })
+        .expect(200)
     })
   })
 })
