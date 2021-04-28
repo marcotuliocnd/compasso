@@ -39,4 +39,4 @@ Também é possível rodar o teste de continuous integration, que irá gerar um 
 
 **Documentação**
 ---
-Toda documentação se encontra no diretório docs/, na raíz do repositório.
+Toda documentação se encontra no diretório docs/, na raíz do repositório. A collection dos endpoints foi gerar utilizando o programa insomnia
