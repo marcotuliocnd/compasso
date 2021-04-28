@@ -10,15 +10,15 @@ export class UpdateCustomerController implements Controller {
   constructor (private readonly updateCustomerById: UpdateCustomerById, private readonly findOneCity: FindOneCity) {}
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
-    if (httpRequest.body.city) {
-      const cityFound = await this.findOneCity.findBy(httpRequest.body.city)
+    const { id, ...updateParams } = httpRequest.body
+
+    if (updateParams.city) {
+      const cityFound = await this.findOneCity.findBy(updateParams.city)
 
       if (!cityFound) {
         return notFound(new InvalidParamError('city'))
       }
     }
-
-    const { id, ...updateParams } = httpRequest.body
 
     await this.updateCustomerById.update(httpRequest.params.customerId, updateParams)
 
