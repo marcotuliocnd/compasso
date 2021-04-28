@@ -166,4 +166,32 @@ describe('CustomerMongoRepository', () => {
       expect(total).toBe(2)
     })
   })
+
+  describe('list', () => {
+    test('Should return all customers if no params is passed', async () => {
+      await customerCollection.insertMany([
+        {
+          age: 'any_age',
+          birthdate_at: 'any_date',
+          city: 'any_city_id',
+          gender: 'any_gender',
+          name: 'any_name'
+        },
+        {
+          age: 'other_age',
+          birthdate_at: 'other_date',
+          city: 'other_city_id',
+          gender: 'other_gender',
+          name: 'other_name'
+        }
+      ])
+
+      const { sut } = makeSut()
+      const customers = await sut.list()
+
+      expect(customers.length).toBe(2)
+      expect(customers[0].name).toBe('any_name')
+      expect(customers[1].name).toBe('other_name')
+    })
+  })
 })
