@@ -68,4 +68,24 @@ describe('DbUpdateCustomerById Usecase', () => {
 
     expect(promise).rejects.toThrow()
   })
+
+  test('Should return an updated customer on success', async () => {
+    const { sut } = makeSut()
+
+    const customerId = 'any_id'
+    const params = {
+      name: 'updated_name'
+    }
+
+    const updatedCustomer = await sut.update(customerId, params)
+
+    expect(updatedCustomer).toEqual({
+      id: 'any_id',
+      name: 'updated_name',
+      age: 'any_age',
+      birthdate_at: 'any_date',
+      city: 'any_city',
+      gender: 'any_gender'
+    })
+  })
 })
