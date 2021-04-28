@@ -31,7 +31,7 @@ Projeto desenvolvido usando uma **arquitetura limpa** de NodeJS e TypeScript, ut
 ---
 Os testes estão separados em testes unitários (npm run test:unit) e testes de integração (npm run test:integration).
 
-Também é possível rodar o teste de continuous integration, que irá gerar um coverage de todo o código. Esse script também é rodado antes de cada push.
+Também é possível rodar o teste de continuous integration (npm run test:ci), que irá gerar um coverage de todo o código. Esse script também é rodado antes de cada push.
 
 **Como rodar o código**
 ---
