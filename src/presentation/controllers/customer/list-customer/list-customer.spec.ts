@@ -1,3 +1,4 @@
+import { ServerError } from './../../../errors/server-errors'
 import { ListCustomerModel, ListCustomer } from './../../../../domain/usecases/customer/list-customer'
 import { ListCustomerController } from './list-customer'
 import { HttpRequest } from './../../../protocols/http'
@@ -60,6 +61,24 @@ describe('ListCustomerController', () => {
 
     expect(listSpy).toHaveBeenCalledWith({
       name: 'any_name'
+    })
+  })
+
+  test('Shoud return 500 if ListCustomer throws', async () => {
+    const { sut, listCustomerStub } = makeSut()
+    jest.spyOn(listCustomerStub, 'list').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+
+    const httpRequest: HttpRequest = {
+      body: {
+        name: 'any_name'
+      }
+    }
+
+    const httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body).toEqual({
+      error: new ServerError().message
     })
   })
 })
