@@ -1,3 +1,4 @@
+import { unprocessableEntity } from './../../../helpers/http-helper'
 import {
   InvalidParamError,
   FindOneCity,
@@ -17,6 +18,12 @@ export class UpdateCustomerController implements Controller {
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
+      if (!httpRequest.body) {
+        return unprocessableEntity({
+          error: 'Missing body'
+        })
+      }
+
       const { id, ...updateParams } = httpRequest.body
 
       if (!httpRequest.params.customerId) {
@@ -34,6 +41,7 @@ export class UpdateCustomerController implements Controller {
       const updatedCustomer = await this.updateCustomerById.update(httpRequest.params.customerId, updateParams)
       return ok(updatedCustomer)
     } catch (error) {
+      console.log(error.message)
       return serverError()
     }
   }
