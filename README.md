@@ -37,7 +37,7 @@ Também é possível rodar o teste de continuous integration (npm run test:ci), 
 ---
 É possível iniciar em desenvolvimento rodando o script de dev (npm run dev).
 
-Para realizra o build, devemos rodar o build (npm run build) e o start (npm run start). Também é possível utilizando o inicio rápido com o docker (docker-compose up --build -d)
+Para realizra o build, devemos rodar o build (npm run build) e o start (npm run start).
 
 **Documentação**
 ---
