@@ -1,7 +1,7 @@
 import { InvalidParamError } from './../../../errors/invalid-param-errors'
 import { FindOneCity } from './../../../../domain/usecases/city/find-one-city'
 import { MissingParamError } from './../../../errors/missing-param-errors'
-import { badRequest, notFound, serverError } from './../../../helpers/http-helper'
+import { badRequest, notFound, serverError, ok } from './../../../helpers/http-helper'
 import { HttpRequest, HttpResponse } from './../../../protocols/http'
 import { Controller } from './../../../protocols/controller'
 import { UpdateCustomerById } from './../../../../domain/usecases/customer/update-customer-by-id'
@@ -13,6 +13,10 @@ export class UpdateCustomerController implements Controller {
     try {
       const { id, ...updateParams } = httpRequest.body
 
+      if (!httpRequest.params.customerId) {
+        return badRequest(new MissingParamError('customerId'))
+      }
+
       if (updateParams.city) {
         const cityFound = await this.findOneCity.findBy(updateParams.city)
 
@@ -21,9 +25,8 @@ export class UpdateCustomerController implements Controller {
         }
       }
 
-      await this.updateCustomerById.update(httpRequest.params.customerId, updateParams)
-
-      return badRequest(new MissingParamError('customerId'))
+      const updatedCustomer = await this.updateCustomerById.update(httpRequest.params.customerId, updateParams)
+      return ok(updatedCustomer)
     } catch (error) {
       return serverError()
     }
