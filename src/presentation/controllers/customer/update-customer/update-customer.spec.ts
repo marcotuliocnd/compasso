@@ -1,3 +1,4 @@
+import { unprocessableEntity } from './../../../helpers/http-helper'
 import {
   InvalidParamError,
   notFound,
@@ -162,6 +163,23 @@ describe('UpdateCustomerController', () => {
     const httpResponse = await sut.handle(httpRequest)
 
     expect(httpResponse).toEqual(notFound(new InvalidParamError('city')))
+  })
+
+  test('Should return 422 if no body is provided', async () => {
+    const { sut, findOneCityStub } = makeSut()
+    jest.spyOn(findOneCityStub, 'findBy').mockReturnValueOnce(new Promise(resolve => resolve(null)))
+
+    const httpRequest: HttpRequest = {
+      params: {
+        customerId: 'any_id'
+      }
+    }
+
+    const httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse).toEqual(unprocessableEntity({
+      error: 'Missing body'
+    }))
   })
 
   test('Should not pass body.id to UpdateCustomerById', async () => {

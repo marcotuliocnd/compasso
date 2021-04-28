@@ -18,7 +18,7 @@ export class UpdateCustomerController implements Controller {
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
-      if (!httpRequest.body) {
+      if (!httpRequest.body || !Object.keys(httpRequest.body).length) {
         return unprocessableEntity({
           error: 'Missing body'
         })
