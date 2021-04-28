@@ -189,4 +189,22 @@ describe('UpdateCustomerController', () => {
 
     expect(httpResponse).toEqual(serverError())
   })
+
+  test('Should return 500 if UpdateCustomerById throws', async () => {
+    const { sut, updateCustomerByIdStub } = makeSut()
+    jest.spyOn(updateCustomerByIdStub, 'update').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+
+    const httpRequest: HttpRequest = {
+      body: {
+        city: 'any_city'
+      },
+      params: {
+        customerId: 'any_id'
+      }
+    }
+
+    const httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse).toEqual(serverError())
+  })
 })
