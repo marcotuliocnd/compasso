@@ -126,7 +126,7 @@ describe('UpdateCustomerController', () => {
 
     await sut.handle(httpRequest)
 
-    expect(findBySpy).toHaveBeenCalledWith('any_city')
+    expect(findBySpy).toHaveBeenCalledWith({ id: 'any_city' })
   })
 
   test('Should not call FindOneCity if no city is provided', async () => {
