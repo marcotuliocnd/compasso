@@ -52,7 +52,7 @@ describe('ListCustomerController', () => {
     const listSpy = jest.spyOn(listCustomerStub, 'list')
 
     const httpRequest: HttpRequest = {
-      body: {
+      queryParams: {
         name: 'any_name'
       }
     }
@@ -69,7 +69,7 @@ describe('ListCustomerController', () => {
     jest.spyOn(listCustomerStub, 'list').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
 
     const httpRequest: HttpRequest = {
-      body: {
+      queryParams: {
         name: 'any_name'
       }
     }
@@ -86,7 +86,7 @@ describe('ListCustomerController', () => {
     const { sut } = makeSut()
 
     const httpRequest: HttpRequest = {
-      body: {
+      queryParams: {
         name: 'any_name'
       }
     }
