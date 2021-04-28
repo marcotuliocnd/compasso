@@ -114,4 +114,22 @@ describe('UpdateCustomerController', () => {
 
     expect(findBySpy).toHaveBeenCalledWith('any_city')
   })
+
+  test('Should not call FindOneCity if no city is provided', async () => {
+    const { sut, findOneCityStub } = makeSut()
+    const findBySpy = jest.spyOn(findOneCityStub, 'findBy')
+
+    const httpRequest: HttpRequest = {
+      body: {
+        name: 'any_name'
+      },
+      params: {
+        customerId: 'any_id'
+      }
+    }
+
+    await sut.handle(httpRequest)
+
+    expect(findBySpy).not.toHaveBeenCalled()
+  })
 })
