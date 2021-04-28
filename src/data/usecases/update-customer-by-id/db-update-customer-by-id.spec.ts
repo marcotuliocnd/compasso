@@ -54,4 +54,18 @@ describe('DbUpdateCustomerById Usecase', () => {
 
     expect(updateSpy).toHaveBeenCalledWith('any_id', { name: 'any_name' })
   })
+
+  test('Should throw if UpdateCustomerByIdRepository throws', async () => {
+    const { sut, updateCustomerByIdRepositoryStub } = makeSut()
+    jest.spyOn(updateCustomerByIdRepositoryStub, 'update').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+
+    const customerId = 'any_id'
+    const params = {
+      name: 'any_name'
+    }
+
+    const promise = sut.update(customerId, params)
+
+    expect(promise).rejects.toThrow()
+  })
 })
