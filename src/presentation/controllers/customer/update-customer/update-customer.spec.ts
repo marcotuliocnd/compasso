@@ -1,5 +1,5 @@
 import { InvalidParamError } from './../../../errors/invalid-param-errors'
-import { notFound, serverError } from './../../../helpers/http-helper'
+import { notFound, serverError, ok } from './../../../helpers/http-helper'
 import { CityModel } from './../../../../domain/models/city'
 import { FindOneCity, FindOneCityModel } from './../../../../domain/usecases/city/find-one-city'
 import { UpdateCustomerByIdModel, UpdateCustomerById } from './../../../../domain/usecases/customer/update-customer-by-id'
@@ -26,7 +26,11 @@ const makeFakeCities = (): CityModel => ({
 const makeUpdateCustomerById = (): UpdateCustomerById => {
   class UpdateCustomerByIdStub implements UpdateCustomerById {
     async update (id: string, values: UpdateCustomerByIdModel): Promise<CustomerModel> {
-      return makeFakeCustomer()
+      const updatedCustomer = {
+        ...makeFakeCustomer(),
+        ...values
+      }
+      return updatedCustomer
     }
   }
 
@@ -206,5 +210,29 @@ describe('UpdateCustomerController', () => {
     const httpResponse = await sut.handle(httpRequest)
 
     expect(httpResponse).toEqual(serverError())
+  })
+
+  test('Should update customer on success', async () => {
+    const { sut } = makeSut()
+
+    const httpRequest: HttpRequest = {
+      body: {
+        name: 'updated_name'
+      },
+      params: {
+        customerId: 'any_id'
+      }
+    }
+
+    const httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse).toEqual(ok({
+      id: 'any_id',
+      name: 'updated_name',
+      age: 'any_age',
+      birthdate_at: 'any_date',
+      city: 'any_city',
+      gender: 'any_gender'
+    }))
   })
 })
