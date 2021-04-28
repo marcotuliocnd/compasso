@@ -31,7 +31,7 @@ export class UpdateCustomerController implements Controller {
       }
 
       if (updateParams.city) {
-        const cityFound = await this.findOneCity.findBy(updateParams.city)
+        const cityFound = await this.findOneCity.findBy({ id: updateParams.city })
 
         if (!cityFound) {
           return notFound(new InvalidParamError('city'))
