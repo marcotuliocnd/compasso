@@ -78,4 +78,14 @@ describe('DbListCustomer Usecase', () => {
 
     expect(promise).rejects.toThrow()
   })
+
+  test('Should return a list of customers on success', async () => {
+    const { sut } = makeSut()
+
+    const customers = await sut.list({
+      name: 'any_name'
+    })
+
+    expect(customers).toEqual(makeFakeCustomers())
+  })
 })
