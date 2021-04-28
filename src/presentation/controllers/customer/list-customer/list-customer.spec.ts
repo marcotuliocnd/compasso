@@ -81,4 +81,19 @@ describe('ListCustomerController', () => {
       error: new ServerError().message
     })
   })
+
+  test('Shoud return 200 on success', async () => {
+    const { sut } = makeSut()
+
+    const httpRequest: HttpRequest = {
+      body: {
+        name: 'any_name'
+      }
+    }
+
+    const httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse.statusCode).toBe(200)
+    expect(httpResponse.body).toEqual(makeFakeCustomers())
+  })
 })
