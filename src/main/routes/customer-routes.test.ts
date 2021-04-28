@@ -69,6 +69,35 @@ describe('Customer Routes', () => {
     })
   })
 
+  describe('UpdateCustomer', () => {
+    test('Should return an updated customer on success', async () => {
+      const cityCollection = MongoHelper.getCollection('cities')
+      const customerCollection = MongoHelper.getCollection('customers')
+
+      const { ops } = await cityCollection.insertOne({
+        name: 'Uberlandia',
+        state: 'MG'
+      })
+
+      const city = MongoHelper.map(ops[0])
+
+      const { ops: customerOps } = await customerCollection.insertOne({
+        name: 'Marco Tulio',
+        age: '20',
+        birthdate_at: '2000-09-11',
+        city: String(city.id),
+        gender: 'masculino'
+      })
+
+      const customer: CustomerModel = MongoHelper.map(customerOps[0])
+
+      await request(app)
+        .patch(`/v1/customers/${customer.id}`)
+        .send({ name: 'Marco Túlio' })
+        .expect(200)
+    })
+  })
+
   describe('DeleteCustomer', () => {
     test('Should return delete customer on success', async () => {
       const cityCollection = MongoHelper.getCollection('cities')
