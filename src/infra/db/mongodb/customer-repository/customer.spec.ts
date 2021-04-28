@@ -109,6 +109,67 @@ describe('CustomerMongoRepository', () => {
     })
   })
 
+  describe('update', () => {
+    test('Should return an updated customer on success', async () => {
+      const result = await customerCollection.insertMany([
+        {
+          age: 'any_age',
+          birthdate_at: 'any_date',
+          city: 'any_city_id',
+          gender: 'any_gender',
+          name: 'any_name'
+        },
+        {
+          age: 'other_age',
+          birthdate_at: 'other_date',
+          city: 'other_city_id',
+          gender: 'other_gender',
+          name: 'other_name'
+        }
+      ])
+
+      const { sut } = makeSut()
+      const customerId = result.ops[0]._id
+      const params = {
+        name: 'updated_name'
+      }
+      const customer = await sut.update(customerId, params)
+
+      expect(customer).toBeTruthy()
+      expect(customer?.id).toEqual(customerId)
+      expect(customer?.name).toBe('updated_name')
+      expect(customer?.age).toBe('any_age')
+      expect(customer?.birthdate_at).toBe('any_date')
+      expect(customer?.city).toBe('any_city_id')
+      expect(customer?.gender).toBe('any_gender')
+    })
+
+    test('Should return null on fail', async () => {
+      await customerCollection.insertMany([
+        {
+          age: 'any_age',
+          birthdate_at: 'any_date',
+          city: 'any_city_id',
+          gender: 'any_gender',
+          name: 'any_name'
+        },
+        {
+          age: 'other_age',
+          birthdate_at: 'other_date',
+          city: 'other_city_id',
+          gender: 'other_gender',
+          name: 'other_name'
+        }
+      ])
+
+      const { sut } = makeSut()
+      const customerId = '111111111111'
+      const customer = await sut.findById(customerId)
+
+      expect(customer).not.toBeTruthy()
+    })
+  })
+
   describe('deleteById', () => {
     test('Should return true on success', async () => {
       const result = await customerCollection.insertMany([
