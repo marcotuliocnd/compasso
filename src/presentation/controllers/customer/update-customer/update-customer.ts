@@ -9,7 +9,9 @@ export class UpdateCustomerController implements Controller {
   constructor (private readonly updateCustomerById: UpdateCustomerById, private readonly findOneCity: FindOneCity) {}
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
-    await this.findOneCity.findBy(httpRequest.body.city)
+    if (httpRequest.body.city) {
+      await this.findOneCity.findBy(httpRequest.body.city)
+    }
     await this.updateCustomerById.update(httpRequest.params.customerId, httpRequest.body)
 
     return badRequest(new MissingParamError('customerId'))
