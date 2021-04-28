@@ -152,4 +152,23 @@ describe('UpdateCustomerController', () => {
 
     expect(httpResponse).toEqual(notFound(new InvalidParamError('city')))
   })
+
+  test('Should not pass body.id to UpdateCustomerById', async () => {
+    const { sut, updateCustomerByIdStub } = makeSut()
+    const updateSpy = jest.spyOn(updateCustomerByIdStub, 'update')
+
+    const httpRequest: HttpRequest = {
+      body: {
+        id: 'any_id',
+        name: 'any_name'
+      },
+      params: {
+        customerId: 'any_id'
+      }
+    }
+
+    await sut.handle(httpRequest)
+
+    expect(updateSpy).toHaveBeenCalledWith('any_id', { name: 'any_name' })
+  })
 })
