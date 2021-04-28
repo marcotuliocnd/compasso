@@ -1,3 +1,5 @@
+import { InvalidParamError } from './../../../errors/invalid-param-errors'
+import { notFound } from './../../../helpers/http-helper'
 import { CityModel } from './../../../../domain/models/city'
 import { FindOneCity, FindOneCityModel } from './../../../../domain/usecases/city/find-one-city'
 import { UpdateCustomerByIdModel, UpdateCustomerById } from './../../../../domain/usecases/customer/update-customer-by-id'
@@ -131,5 +133,23 @@ describe('UpdateCustomerController', () => {
     await sut.handle(httpRequest)
 
     expect(findBySpy).not.toHaveBeenCalled()
+  })
+
+  test('Should return 404 if invalid city is provided', async () => {
+    const { sut, findOneCityStub } = makeSut()
+    jest.spyOn(findOneCityStub, 'findBy').mockReturnValueOnce(new Promise(resolve => resolve(null)))
+
+    const httpRequest: HttpRequest = {
+      body: {
+        city: 'invalid_city'
+      },
+      params: {
+        customerId: 'any_id'
+      }
+    }
+
+    const httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse).toEqual(notFound(new InvalidParamError('city')))
   })
 })
